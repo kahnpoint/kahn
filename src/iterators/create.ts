@@ -4,8 +4,8 @@ const source = pushable()
 source.push('hello')
 source.end()
 */
-import { pushable } from 'it-pushable'
-export {pushable}
+import { pushable } from "it-pushable";
+export { pushable };
 
 // Lets you look at the contents of an async iterator and decide what to do
 /*
@@ -13,8 +13,8 @@ const values = [0, 1, 2, 3, 4]
 const it = toPeekable(values)
 const first = it.peek()
 */
-import peekable from 'it-peekable';
-export {peekable}
+import peekable from "it-peekable";
+export { peekable };
 
 /*
 const source = recoverable(err => {
@@ -31,16 +31,15 @@ const source = recoverable(err => {
   }
 })
 */
-import recoverable from 'recoverable-iterator';
-export {recoverable}
+import recoverable from "recoverable-iterator";
+export { recoverable };
 
 export {
   abortableSource,
   abortableSink,
   abortableTransform,
-  abortableDuplex
-} from 'abortable-iterator'
-
+  abortableDuplex,
+} from "abortable-iterator";
 
 /*
 const emitter = it.emitter(asyncIterator)
@@ -59,19 +58,19 @@ await emitter.cancel()
 */
 
 enum EmitterEvent {
-	Value = 'value',
-	Error = 'error',
-	End = 'end'
+  Value = "value",
+  Error = "error",
+  End = "end",
 }
 
 type EmitterEventEmitter = EventEmitter<{
-	[EmitterEvent.Value]: [any];
-	[EmitterEvent.Error]: [Error];
-	[EmitterEvent.End]: [];
+  [EmitterEvent.Value]: [any];
+  [EmitterEvent.Error]: [Error];
+  [EmitterEvent.End]: [];
 }>;
 
-import Emitterator from 'emitterator'
-import {EventEmitter} from 'events'
+import Emitterator from "emitterator";
+import { EventEmitter } from "events";
 
-export const emitter = (source: AsyncIterable<any>
-): EmitterEventEmitter => new Emitterator(source)
+export const emitter = (source: AsyncIterable<any>): EmitterEventEmitter =>
+  new Emitterator(source);

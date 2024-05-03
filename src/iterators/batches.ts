@@ -12,8 +12,8 @@ const arr = all(split(values))
 
 console.info(arr) // [encoder.encode('hello'), encoder.encode('world')]
 */
-import split from 'it-split';
-export {split}
+import split from "it-split";
+export { split };
 
 // Takes an async iterator that emits things and emits them as fixed size batches
 /*
@@ -24,12 +24,12 @@ const result = all(batch(values, batchSize))
 
 console.info(result) // [0, 1], [2, 3], [4]
 */
-import batch from 'it-batch';
-export {batch}
+import batch from "it-batch";
+export { batch };
 
 // Takes an async iterator that emits byte arrays and emits them as fixed size batches
-import batchBytes from 'it-batched-bytes';
-export {batchBytes}
+import batchBytes from "it-batched-bytes";
+export { batchBytes };
 
 // Takes an async iterator that emits variable length arrays and emits them as fixed size batches
 /*
@@ -44,13 +44,14 @@ const result = all(batch(values, batchSize))
 
 console.info(result) // [0, 1], [2, 3], [4]
 */
-import rebatch from 'it-flat-batch';
-export {rebatch}
-
+import rebatch from "it-flat-batch";
+export { rebatch };
 
 // recursively flatten an async iterable
 // it.flatten([1, [2, [3, 4], 5], 6]) -> 1, 2, 3, 4, 5, 6
-export const flatten = async function* <T>(itr: AsyncIterable<T | AsyncIterable<T>>): AsyncGenerator<T, void, undefined> {
+export const flatten = async function* <T>(
+  itr: AsyncIterable<T | AsyncIterable<T>>,
+): AsyncGenerator<T, void, undefined> {
   for await (const item of itr) {
     if (Symbol.asyncIterator in Object(item)) {
       yield* flatten(item as AsyncIterable<T>);
@@ -70,21 +71,23 @@ export const flatten = async function* <T>(itr: AsyncIterable<T | AsyncIterable<
  * @param batchSize - size of the batch to be processed
  * @returns an async generator that yields the results
  */
-import parallel from 'it-parallel';
-import parallelBatch from 'it-parallel-batch';
+import parallel from "it-parallel";
+import parallelBatch from "it-parallel-batch";
 export type ProcessOptions = {
-  concurrency: number 
-  ordered: boolean
-  batchSize: number 
-}
-export const process = async function * (
+  concurrency: number;
+  ordered: boolean;
+  batchSize: number;
+};
+export const process = async function* (
   source: Iterable<() => Promise<T>> | AsyncIterable<() => Promise<T>>,
-  options: ProcessOptions = {concurrency: 1, ordered: true, batchSize: 0}
-
-) : AsyncGenerator<T, void, undefined> {
+  options: ProcessOptions = { concurrency: 1, ordered: true, batchSize: 0 },
+): AsyncGenerator<T, void, undefined> {
   if (options.batchSize > 0) {
     return yield parallelBatch(source, options.batchSize);
   } else {
-    return yield parallel(source, {concurrency: options.concurrency, ordered: options.ordered});
+    return yield parallel(source, {
+      concurrency: options.concurrency,
+      ordered: options.ordered,
+    });
   }
-}
+};

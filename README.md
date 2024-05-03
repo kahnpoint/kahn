@@ -1,16 +1,19 @@
 # Kahn
+
 Adam's collection of Typescript utility functions.
 
 # Categories
 
 ### Reexports
+
 ```javascript
-import {_} from 'kahn' // lodash
-import {id} from 'kahn' // nanoid
-import {cache} from 'kahn' // lib0/cache
+import { _ } from "kahn"; // lodash
+import { id } from "kahn"; // nanoid
+import { cache } from "kahn"; // lib0/cache
 ```
 
 ### Bytes
+
 ```javascript
 import {bytes} from 'kahn'
 
@@ -54,36 +57,40 @@ bytes.random(length: number)
 bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommended due to serialization performance
 ```
 
- 
-### Krypto 
-*(named weirdly to avoid conflict with node's crypto package)*
-Cryptographic functions.
+### Krypto
 
+_(named weirdly to avoid conflict with Node/browser crypto packages)_
+
+```javascript
+import {krypto} from 'kahn'
+```
 
 ### Encoder and Decoder
+
 Mostly the same as [lib0](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
 
 ```javascript
-import {encoder} from 'kahn'
+import { encoder } from "kahn";
 
-const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)]
+const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)];
 
 // Encode
-const encoding = encoder.create()
-encoder.repeated(encoder.writeBytes, encoding, randomBytes)
-const serialized = encoder.toBytes(encoding)
+const encoding = encoder.create();
+encoder.repeated(encoder.writeBytes, encoding, randomBytes);
+const serialized = encoder.toBytes(encoding);
 
 // Decode
-const decoding = decoder.create(serialized)
-const decodedBytes = decoder.repeated(decoder.readBytes, decoding)
-const deserialized = decoder.toBytes(decoding)
+const decoding = decoder.create(serialized);
+const decodedBytes = decoder.repeated(decoder.readBytes, decoding);
+const deserialized = decoder.toBytes(decoding);
 
-randomBytes === decodedBytes // true
+randomBytes === decodedBytes; // true
 ```
 
-
 ### It
+
 Renamed iterator functions from [it](https://github.com/achingbrain/it).
+
 ```javascript
 import {it} from 'kahn'
 
@@ -124,13 +131,13 @@ it.count(iterable: Iterable<T>): Promise<number>
 // Filters the passed iterable by the filter function
 it.filter(iterable: Iterable<T>, filter: (value: T) => boolean): AsyncIterable<T>
 
-// Maps the values by a function 
+// Maps the values by a function
 it.map(iterable: Iterable<T>, map: (value: T) => U): AsyncIterable<U>
 
 // Reduces the values by a function
 it.reduce(
-	iterable: Iterable<T>, 
-	reducer: (acc: U, curr: T, index: number) => U, 
+	iterable: Iterable<T>,
+	reducer: (acc: U, curr: T, index: number) => U,
 	initialValue: U
 	): Promise<U>
 
@@ -138,9 +145,9 @@ it.reduce(
 it.sort(iterable: Iterable<T>, sorter: (a: T, b: T) => number): AsyncIterable<T>
 
 // Applies a function to each item in the iterable
-it.apply(source: Iterable<T>, 
+it.apply(source: Iterable<T>,
 	fn: (thing: T, index: number) => Promise<void>
-): AsyncGenerator<T> 
+): AsyncGenerator<T>
 
 // Invokes each incoming function in parallel
 // Batched jobs are always ordered and ignore concurrency
@@ -194,7 +201,8 @@ const emitter = it.emitter(iterable: AsyncIterable<any>)
 ```
 
 ### Misc
+
 ```javascript
-import {wait} from 'kahn'
-await wait(1000) // wait for 1 second
+import { wait } from "kahn";
+await wait(1000); // wait for 1 second
 ```

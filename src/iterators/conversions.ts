@@ -1,15 +1,14 @@
 // Collects all Uint8Array values from an (async)iterable and returns them as a single Uint8Array.
-import toBytes from 'it-to-buffer';
-export {toBytes}
+import toBytes from "it-to-buffer";
+export { toBytes };
 
 // Turns a blob into an async iterator
-import fromBlob from 'blob-to-it';
-export {fromBlob}
-
+import fromBlob from "blob-to-it";
+export { fromBlob };
 
 // Async iterable filename pattern matcher - like glob, but for async iterables
-import fromGlob from 'it-glob';
-export {fromGlob}
+import fromGlob from "it-glob";
+export { fromGlob };
 
 // Allows iterating over multipart messages found in a HTTP request
 /*
@@ -24,10 +23,9 @@ http.createServer(async (req, res) => {
       }
     }
 */
-import fromMultipart from 'it-multipart';
-export {fromMultipart}
+import fromMultipart from "it-multipart";
+export { fromMultipart };
 
 // Turn (async)iterable values into JSON and back again.
-import {parse, stringify} from 'it-ndjson';
-export {parse, stringify}
-
+import { parse, stringify } from "it-ndjson";
+export { parse, stringify };
