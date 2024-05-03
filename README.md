@@ -61,8 +61,33 @@ bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommende
 
 _(named weirdly to avoid conflict with Node/browser crypto packages)_
 
+Keys are Base58 strings. Even though they need to be converted to Bytes for use in the functions, they are stored as strings to be able to be used as keys in objects. _If it becomes a performance issue, I will give the Keypair objects cached Bytes fields._
+
 ```javascript
-import {krypto} from 'kahn'
+import { krypto } from "kahn";
+
+// Hash - SHA256
+krypto.createHash(b: Bytes): Hash
+krypto.verifyHash(b: Bytes, hash: Hash): boolean
+
+// Checksum - CRC32
+krypto.createChecksum(b: Bytes): Checksum
+krypto.verifyChecksum(b: Bytes, checksum: Checksum): boolean
+
+// Symmetric Encryption - ChaCha20
+krypto.encrypt(sharedKey: SharedKey, b: Bytes): EncryptedBytes
+krypto.decrypt(sharedKey: SharedKey, b: Bytes): DecryptedBytes
+
+// Asymmetric Encryption - ed25519
+krypto.createKeyPair(privateKey?: PrivateKey): KeyPair
+krypto.verifyKeyPair(keyPair: KeyPair): boolean
+
+krypto.createSignature(privateKey: PrivateKey, b: Bytes): Signature
+krypto.verifySignature(publicKey: PublicKey, b: Bytes, signature: Signature): boolean
+
+// Key Exchange - x25519
+krypto.createSharedKey(privateKey: PrivateKey, publicKey: PublicKey): SharedKey
+krypto.verifySharedKey(privateKey: PrivateKey, publicKey: PublicKey, sharedKey: SharedKey): boolean
 ```
 
 ### Encoder and Decoder

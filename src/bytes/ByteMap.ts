@@ -1,4 +1,4 @@
-import type { Bytes } from "../types";
+import type { Bytes } from "../misc/types";
 import * as bytes from "./conversions";
 
 export class ByteMap<V> {

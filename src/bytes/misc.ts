@@ -1,4 +1,9 @@
-import type { Bytes, ChunkedBytes, ByteLength, Comparison } from "../types";
+import type {
+  Bytes,
+  ChunkedBytes,
+  ByteLength,
+  Comparison,
+} from "../misc/types";
 import { randomBytes } from "@noble/ciphers/crypto";
 import { concatBytes, equalBytes } from "@noble/ciphers/utils";
 
@@ -38,13 +43,13 @@ export function unchunk(chunks: ChunkedBytes): Bytes {
 // uint8buffers
 
 // create a new byte array 	of a given length
-import { alloc } from "uint8buffers/alloc";
+import { alloc } from "uint8arrays/alloc";
 export const create = (length: ByteLength): Bytes => alloc(length);
 
 // compare two byte buffers for equality, can be used with Array.sort to sort and array with Uint8Array entries
-import { compare as _compare } from "uint8buffers/compare";
+import { compare as _compare } from "uint8arrays/compare";
 export const compare = (a: Bytes, b: Bytes): Comparison => _compare(a, b);
 
 // xor two byte buffers
-import { xor as _xor } from "uint8buffers/xor";
+import { xor as _xor } from "uint8arrays/xor";
 export const xor = (a: Bytes, b: Bytes): Bytes => _xor(a, b);

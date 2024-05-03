@@ -9,7 +9,7 @@ export * from "lib0/encoding";
  */
 export function repeated(
   encoderFunction: any,
-  encoder: encoding.Encoder,
+  encoder: any,
   iterableInput: any,
 ) {
   const outputEncoder = new encoding.Encoder();

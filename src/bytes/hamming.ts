@@ -1,4 +1,4 @@
-import type { Bytes } from "@mootline/types";
+import type { Bytes } from "../misc/types";
 
 // hamming distance
 

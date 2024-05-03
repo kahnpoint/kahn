@@ -4,7 +4,7 @@ export { nanoid as id } from "nanoid";
 export * as cache from "lib0/cache";
 
 // types
-export * from "./types";
+export * from "./misc/types";
 
 // bytes
 export * as bytes from "./bytes";

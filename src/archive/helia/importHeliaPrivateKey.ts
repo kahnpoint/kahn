@@ -1,8 +1,10 @@
 import { base64 } from "multiformats/bases/base64";
 import type { Helia } from "helia";
-import { PrivateKey } from "@mootline/types";
 import * as ciphers from "./aes-gcm";
 import { b, c } from "@mootline/utils";
+import { Bytes } from "../../misc/types";
+
+type PrivateKey = Bytes;
 
 export async function importHeliaPrivateKey(
   heliaInstance: Helia,
