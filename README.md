@@ -1,5 +1,5 @@
 # Kahn
-Adam's Typescript utility functions.
+Adam's collection of Typescript utility functions.
 
 # Categories
 
@@ -60,7 +60,6 @@ bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommende
 Cryptographic functions.
 
 
-
 ### Encoder and Decoder
 Mostly the same as [lib0](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
 
@@ -81,6 +80,7 @@ const deserialized = decoder.toBytes(decoding)
 
 randomBytes === decodedBytes // true
 ```
+
 
 ### It
 Renamed iterator functions from [it](https://github.com/achingbrain/it).
