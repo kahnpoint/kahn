@@ -42,18 +42,18 @@ bytes.fromObject(obj: object): Bytes
 bytes.toObject(b: Bytes): object
 
 // comparisons
-bytes.xor(b1: Bytes, b2: Bytes)
-bytes.hamming(b1: Bytes, b2: Bytes)
+bytes.xor(b1: Bytes, b2: Bytes): Bytes
+bytes.hamming(b1: Bytes, b2: Bytes): number
 bytes.equal(b1: Bytes, b2: Bytes): boolean
-bytes.compare(b1: Bytes, b2: Bytes): Comparison
+bytes.compare(b1: Bytes, b2: Bytes): Comparison // -1, 0, 1
 
 // manipulation
-bytes.concat(...b: Bytes[])
+bytes.concat(...b: Bytes[]): Bytes
 bytes.chunk(b: Bytes, chunkSize: number): ChunkedBytes
 bytes.unchunk(b: ChunkedBytes): Bytes
 
 // misc
-bytes.random(length: number)
+bytes.random(length: number): Bytes
 bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommended due to serialization performance
 ```
 

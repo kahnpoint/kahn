@@ -1,5 +1,7 @@
 [ ] Document Krypto
-[ ] Tests
-[ ] Protobufs
+[ ] Protobufs?
 [ ] Promises
 [ ] Cryptographic Types
+[ ] Duplex Streams
+[ ] Other Streams
+[ ] Tests
