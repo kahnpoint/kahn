@@ -1,8 +1,8 @@
 # Kahn
 
-This package holds my commonly used utility functions and classes. 
+Adam's Typescript utility functions.
 
-# Packages
+# Categories
 
 ### Reexports
 ```javascript
@@ -12,7 +12,6 @@ import {cache} from 'kahn' // lib0/cache
 ```
 
 ### Bytes
-Byte manipulation functions.
 ```javascript
 import {bytes} from 'kahn'
 
@@ -193,8 +192,6 @@ const emitter = it.emitter(iterable: AsyncIterable<any>)
 // emitter.on('end', () => console.log('done'))
 // emitter.on('error', (err) => console.error(err))
 // await emitter.cancel() // to end early
-
-
 ```
 
 ### Misc
