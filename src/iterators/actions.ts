@@ -84,9 +84,3 @@ export { take };
 // tees an async iterator into two or more identical iterators
 import { pipe } from "it-pipe";
 export { pipe };
-
-import { pair as push } from "it-pair";
-export { push };
-
-import { duplexPair as portals } from "it-pair/duplex";
-export { portals };

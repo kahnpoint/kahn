@@ -1,4 +1,4 @@
-[ ] Promises
+[ ] Document Promises
 [ ] Duplex Streams
 [ ] Other Streams
 [ ] Tests

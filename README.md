@@ -10,6 +10,7 @@ Adam's collection of Typescript utility functions.
 import { _ } from "kahn"; // lodash
 import { id } from "kahn"; // nanoid
 import { cache } from "kahn"; // lib0/cache
+import { ky } from "kahn"; // ky
 ```
 
 ### Bytes
@@ -144,103 +145,25 @@ const deserialized = decoder.toBytes(decoding);
 randomBytes === decodedBytes; // true
 ```
 
-### It
+### Iterating
 
 Renamed iterator functions from [it](https://github.com/achingbrain/it).
 
 ```javascript
-import {it} from 'kahn'
+import {iterating} from 'kahn'
 
 /* Create */
 
 // Create an iterable that can be pushed to
-//const iter = it.pushable().push(0)
-it.pushable(): Pushable<T>
-
-/* Actions */
-
-// Collects all the values into an array
-it.collect(iterable: Iterable<T>): Promise<T[]>
-
-// Empties the iterable
-it.drain(iterable: Iterable<T>): Promise<void>
-
-// Returns the next value
-it.first(iterable: Iterable<T>): Promise<T>
-
-// Returns the last value
-it.last(iterable: Iterable<T>): Promise<T>
-
-// Takes the first n items from an iterable
-it.take(iterable: Iterable<T>, n: number): AsyncIterable<T>
-
-// Skip n items
-it.skip(iterable: Iterable<T>, n: number): AsyncIterable<T>
-
-// Merges multiple iterables into a single iterable
-it.merge(...iterables: Iterable<T>[]): AsyncIterable<T>
-
-// Empties and counts the number of items in an iterable
-it.count(iterable: Iterable<T>): Promise<number>
-
-/* Flow */
-
-// Filters the passed iterable by the filter function
-it.filter(iterable: Iterable<T>, filter: (value: T) => boolean): AsyncIterable<T>
-
-// Maps the values by a function
-it.map(iterable: Iterable<T>, map: (value: T) => U): AsyncIterable<U>
-
-// Reduces the values by a function
-it.reduce(
-	iterable: Iterable<T>,
-	reducer: (acc: U, curr: T, index: number) => U,
-	initialValue: U
-	): Promise<U>
-
-// Sorts the values by a function
-it.sort(iterable: Iterable<T>, sorter: (a: T, b: T) => number): AsyncIterable<T>
-
-// Applies a function to each item in the iterable
-it.apply(source: Iterable<T>,
-	fn: (thing: T, index: number) => Promise<void>
-): AsyncGenerator<T>
-
-// Invokes each incoming function in parallel
-// Batched jobs are always ordered and ignore concurrency
-it.process(
-	source: Iterable<() => Promise<T>> | AsyncIterable<() => Promise<T>>,
-  options: {concurrency: 1, ordered: true, batchSize: 0}): AsyncIterable<T>
-
-/* Pipes */
-
-// Pipes (tees) the iterable into multiple sinks
-it.pipe(source: Iterable<T>, ...sinks: Iterable<T>[]): AsyncIterable<T>
-
-// Get two linked duplex streams
-const [orange, blue] = it.portals()
-
-/* Batches */
-
-// Split the values by a delimiter
-it.split(iterable: Iterable<Uint8Array>, delimiter?: Uint8Array): AsyncIterable<Uint8Array>
-
-// Batch values into chunks of a certain size
-// it.batch([0, 1, 2, 3, 4], 2) => [[0, 1], [2, 3], [4]]
-it.batch(iterable: Iterable<T>, size: number): AsyncIterable<T[]>
-
-// Regularize values into chunks of a certain size
-// it.rebatch([[0, 1, 2], [3], [4]], 2) => [[0, 1], [2, 3], [4]]
-it.rebatch(iterable: Iterable<T[]>): AsyncIterable<T>
-
-/* Modifiers */
+//const iter = iterating.pushable().push(0)
+iterating.Pushable(): Pushable<T>
 
 // allow for peeking at the next value
-// const nextValue = it.peekable([0, 1, 2]).peek()
-it.peekable(iterable: Iterable<T>): AsyncIterable<T>
+// const nextValue = iterating.peekable([0, 1, 2]).peek()
+iterating.Peekable(iterable: Iterable<T>): AsyncIterable<T>
 
 // allow for recovering from errors
-it.recoverable(err => {
+iterating.Recoverable(err => {
   // Called with no error when the iteration starts
   if (!err) {
     return myIterable
@@ -250,11 +173,92 @@ it.recoverable(err => {
 })
 
 // emits events for each value
-const emitter = it.emitter(iterable: AsyncIterable<any>)
+iterating.Emitter(iterable: AsyncIterable<any>)
 // emitter.on('value', (v) => console.log(v))
 // emitter.on('end', () => console.log('done'))
 // emitter.on('error', (err) => console.error(err))
 // await emitter.cancel() // to end early
+
+// Unidirecctional duplex stream
+// const [sink, source] = iterating.portal()
+iterating.Portal()
+
+// Bidirectional duplex streams
+// const [orange, blue] = iterating.portals()
+iterating.Portals()
+
+/* Actions */
+
+// Collects all the values into an array
+iterating.collect(iterable: Iterable<T>): Promise<T[]>
+
+// Empties the iterable
+iterating.drain(iterable: Iterable<T>): Promise<void>
+
+// Returns the next value
+iterating.first(iterable: Iterable<T>): Promise<T>
+
+// Returns the last value
+iterating.last(iterable: Iterable<T>): Promise<T>
+
+// Takes the first n items from an iterable
+iterating.take(iterable: Iterable<T>, n: number): AsyncIterable<T>
+
+// Skip n items
+iterating.skip(iterable: Iterable<T>, n: number): AsyncIterable<T>
+
+// Merges multiple iterables into a single iterable
+iterating.merge(...iterables: Iterable<T>[]): AsyncIterable<T>
+
+// Empties and counts the number of items in an iterable
+iterating.count(iterable: Iterable<T>): Promise<number>
+
+/* Flow */
+
+// Filters the passed iterable by the filter function
+iterating.filter(iterable: Iterable<T>, filter: (value: T) => boolean): AsyncIterable<T>
+
+// Maps the values by a function
+iterating.map(iterable: Iterable<T>, map: (value: T) => U): AsyncIterable<U>
+
+// Reduces the values by a function
+iterating.reduce(
+	iterable: Iterable<T>,
+	reducer: (acc: U, curr: T, index: number) => U,
+	initialValue: U
+	): Promise<U>
+
+// Sorts the values by a function
+iterating.sort(iterable: Iterable<T>, sorter: (a: T, b: T) => number): AsyncIterable<T>
+
+// Applies a function to each item in the iterable
+iterating.apply(source: Iterable<T>,
+	fn: (thing: T, index: number) => Promise<void>
+): AsyncGenerator<T>
+
+// Invokes each incoming function in parallel
+// Batched jobs are always ordered and ignore concurrency
+iterating.process(
+	source: Iterable<() => Promise<T>> | AsyncIterable<() => Promise<T>>,
+  options: {concurrency: 1, ordered: true, batchSize: 0}): AsyncIterable<T>
+
+/* Pipes */
+
+// Pipes (tees) the iterable into multiple sinks
+iterating.pipe(source: Iterable<T>, ...sinks: Iterable<T>[]): AsyncIterable<T>
+
+/* Batches */
+
+// Split the values by a delimiter
+iterating.split(iterable: Iterable<Uint8Array>, delimiter?: Uint8Array): AsyncIterable<Uint8Array>
+
+// Batch values into chunks of a certain size
+// iterating.batch([0, 1, 2, 3, 4], 2) => [[0, 1], [2, 3], [4]]
+iterating.batch(iterable: Iterable<T>, size: number): AsyncIterable<T[]>
+
+// Regularize values into chunks of a certain size
+// iterating.rebatch([[0, 1, 2], [3], [4]], 2) => [[0, 1], [2, 3], [4]]
+iterating.rebatch(iterable: Iterable<T[]>): AsyncIterable<T>
 ```
 
 ### Constants
@@ -268,21 +272,17 @@ export const TB = 1024 * GB;
 export const PB = 1024 * TB;
 ```
 
-### Misc
+### Types
 
 ```javascript
-import { wait } from "kahn";
-await wait(1000); // wait for 1 second
-
-// Types
 enum Comparison {
   LessThan = -1,
   Equal = 0,
   GreaterThan = 1,
 }
-enum Comparison {
-  LessThan = -1,
-  Equal = 0,
-  GreaterThan = 1,
+export enum Ternary {
+  False = -1,
+  Unknown = 0,
+  True = 1,
 }
 ```

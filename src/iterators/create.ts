@@ -5,7 +5,7 @@ source.push('hello')
 source.end()
 */
 import { pushable } from "it-pushable";
-export { pushable };
+export { pushable as Pushable };
 
 // Lets you look at the contents of an async iterator and decide what to do
 /*
@@ -14,7 +14,7 @@ const it = toPeekable(values)
 const first = it.peek()
 */
 import peekable from "it-peekable";
-export { peekable };
+export { peekable as Peekable };
 
 /*
 const source = recoverable(err => {
@@ -32,7 +32,7 @@ const source = recoverable(err => {
 })
 */
 import recoverable from "recoverable-iterator";
-export { recoverable };
+export { recoverable as Recoverable };
 
 export {
   abortableSource,
@@ -72,5 +72,16 @@ type EmitterEventEmitter = EventEmitter<{
 import Emitterator from "emitterator";
 import { EventEmitter } from "events";
 
-export const emitter = (source: AsyncIterable<any>): EmitterEventEmitter =>
+export const Emitter = (source: AsyncIterable<any>): EmitterEventEmitter =>
   new Emitterator(source);
+
+// One linked async iterator
+import { pair } from "it-pair";
+export function Portal() {
+  const p = pair();
+  return p.sink, p.source;
+}
+
+// Two linked async iterators
+import { duplexPair as Portals } from "it-pair/duplex";
+export { Portals };

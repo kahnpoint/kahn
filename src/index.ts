@@ -2,6 +2,8 @@ import _ from "lodash";
 export { _ };
 export { nanoid as id } from "nanoid";
 export * as cache from "lib0/cache";
+import ky from "ky";
+export { ky };
 
 // constants
 export * from "./constants";
@@ -25,7 +27,10 @@ export * as decoding from "./decoding";
 export * as encoding from "./encoding";
 
 // iterators
-export * as it from "./iterators";
+export * as iterating from "./iterators";
 
 // strings
 export * as strings from "./strings";
+
+// promises
+export * as promising from "./promising";
