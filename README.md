@@ -55,13 +55,28 @@ bytes.unchunk(b: ChunkedBytes): Bytes
 // misc
 bytes.random(length: number): Bytes
 bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommended due to serialization performance
+
+// Types
+type Bytes = Uint8Array;
+type EncryptedBytes = Uint8Array;
+type DecryptedBytes = Uint8Array;
+type HashedBytes = Uint8Array;
+type SignedBytes = Uint8Array;
+type ChunkedBytes = Uint8Array[];
+type ByteLength = number; // the length of a Bytearray
+enum ByteLengthOf {
+	Uint8 = 1,
+	Uint16 = 2,
+	Uint32 = 4,
+	Uint64 = 8,
+}
 ```
 
 ### Krypto
 
 _(named weirdly to avoid conflict with Node/browser crypto packages)_
 
-Keys are Base58 strings. Even though they need to be converted to Bytes for use in the functions, they are stored as strings to be able to be used as keys in objects. _If it becomes a performance issue, I will give the Keypair objects cached Bytes fields._
+Keys are Base58 strings. Even though they need to be converted to Bytes for use in the cryptographic functions from [@noble/curves](https://www.npmjs.com/package/@noble/curves), they are stored as strings to be able to be used as keys in objects. _If it becomes a performance issue, I will give the Keypair objects cached Bytes fields._
 
 ```javascript
 import { krypto } from "kahn";
@@ -88,6 +103,23 @@ krypto.verifySignature(publicKey: PublicKey, b: Bytes, signature: Signature): bo
 // Key Exchange - x25519
 krypto.createSharedKey(privateKey: PrivateKey, publicKey: PublicKey): SharedKey
 krypto.verifySharedKey(privateKey: PrivateKey, publicKey: PublicKey, sharedKey: SharedKey): boolean
+
+// Types
+type Hash = string;
+type Signature = string;
+type Checksum = number;
+type AnyKey = string;
+type PublicKey = AnyKey;
+type PrivateKey = AnyKey;
+type SharedKey = AnyKey;
+type PublicKeyBytes = Bytes;
+type PrivateKeyBytes = Bytes;
+type SharedKeyBytes = Bytes;
+type KeyPair = {
+  publicKey: PublicKey;
+  privateKey: PrivateKey;
+};
+type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
 ```
 
 ### Encoder and Decoder
@@ -225,9 +257,32 @@ const emitter = it.emitter(iterable: AsyncIterable<any>)
 // await emitter.cancel() // to end early
 ```
 
+### Constants
+
+```javascript
+export const B = 1;
+export const KB = 1024;
+export const MB = 1024 * KB;
+export const GB = 1024 * MB;
+export const TB = 1024 * GB;
+export const PB = 1024 * TB;
+```
+
 ### Misc
 
 ```javascript
 import { wait } from "kahn";
 await wait(1000); // wait for 1 second
+
+// Types
+enum Comparison {
+  LessThan = -1,
+  Equal = 0,
+  GreaterThan = 1,
+}
+enum Comparison {
+  LessThan = -1,
+  Equal = 0,
+  GreaterThan = 1,
+}
 ```

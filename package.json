@@ -1,6 +1,6 @@
 {
   "name": "kahn",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Adam's utility functions",
   "keywords": [],
   "main": "src/index.js",

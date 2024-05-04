@@ -3,14 +3,20 @@ export { _ };
 export { nanoid as id } from "nanoid";
 export * as cache from "lib0/cache";
 
-// types
+// constants
+export * from "./constants";
+
+// misc
+export * from "./misc";
 export * from "./misc/types";
 
 // bytes
 export * as bytes from "./bytes";
+export * from "./bytes/types";
 
 // crypto
 export * as krypto from "./krypto";
+export * from "./krypto/types";
 
 // decoding
 export * as decoding from "./decoding";
@@ -23,6 +29,3 @@ export * as it from "./iterators";
 
 // strings
 export * as strings from "./strings";
-
-// tests
-export * as tests from "./misc";
