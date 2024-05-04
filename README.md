@@ -1,8 +1,19 @@
 # Kahn
 
-Adam's collection of Typescript utility functions.
+My current collection of Typescript utility functions.
+Some of these will be stripped out as I find what functions I use the most.
+*In the future I plan to make the exports more modular, like how lodash has `lodash/` for individual functions.*
 
-# Categories
+## Categories
+- [Reexports](#reexports)
+- [Bytes](#bytes)
+- [Crypto](#krypto)
+- [Encoding and Decoding](#encoding-and-decoding)
+- [Iterating](#iterating)
+- [Constants](#constants)
+- [Types](#types)
+
+## Packages
 
 ### Reexports
 
@@ -55,7 +66,7 @@ bytes.unchunk(b: ChunkedBytes): Bytes
 
 // misc
 bytes.random(length: number): Bytes
-bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommended due to serialization performance
+bytes.ByteMap<V>: Map<Bytes, V> // a map that uses Bytes as keys, not recommended due to having to convert to strings
 
 // Types
 type Bytes = Uint8Array;
@@ -123,24 +134,24 @@ type KeyPair = {
 type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
 ```
 
-### Encoder and Decoder
+### Encoding and Decoding
 
-Mostly the same as [lib0](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
+Mostly the same as [lib0/encoding](https://www.npmjs.com/package/lib0) and  [lib0/decoding](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
 
 ```javascript
-import { encoder } from "kahn";
-
 const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)];
 
 // Encode
-const encoding = encoder.create();
-encoder.repeated(encoder.writeBytes, encoding, randomBytes);
-const serialized = encoder.toBytes(encoding);
+import { encoding } from "kahn";
+const encoder = encoding.create();
+encoding.repeated(encoding.writeBytes, encoder, randomBytes);
+const serialized = encoding.toBytes(encoder);
 
 // Decode
-const decoding = decoder.create(serialized);
-const decodedBytes = decoder.repeated(decoder.readBytes, decoding);
-const deserialized = decoder.toBytes(decoding);
+import { decoding } from "kahn";
+const decoder = decoding.create(serialized);
+const decodedBytes = decoding.repeated(decoding.readBytes, decoder);
+const deserialized = decoding.toBytes(decoder);
 
 randomBytes === decodedBytes; // true
 ```

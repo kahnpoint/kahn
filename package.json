@@ -1,16 +1,20 @@
 {
   "name": "kahn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adam's utility functions",
   "keywords": [],
   "main": "src/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "bash scripts/sh/vitest.sh",
     "fmt": "prettier --write .",
     "v:dev": "vite",
     "v:build": "tsc && vite build",
     "v:preview": "vite preview",
-    "v:deploy": "vite build && npx wrangler pages deploy dist"
+    "v:deploy": "vite build && npx wrangler pages deploy dist",
+    "publish": "vite build && npm publish --access public"
   },
   "dependencies": {
     "@noble/ciphers": "^0.5.1",
