@@ -1,6 +1,6 @@
 {
   "name": "kahn",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Adam's utility functions",
   "keywords": [],
   "main": "src/index.js",
@@ -163,6 +163,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kahnpoint/kahn"
+    "url": "git+https://github.com/kahnpoint/kahn.git"
   }
 }

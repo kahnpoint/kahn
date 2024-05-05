@@ -356,7 +356,6 @@ const result = await Promise.all(input);
 */
 
 // rate limit a promise
-export { pThrottle as throttle };
 promising.Throttle<T>(func: () => Promise<T>, limit: number, interval: number): Promise<T>
 /*
 const throttle = promising.Throttle({
