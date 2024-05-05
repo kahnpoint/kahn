@@ -297,6 +297,8 @@ iterating.rebatch(iterable: Iterable<T[]>): AsyncIterable<T>
 
 ### Promising
 
+Renamed promise functions from [sindresorhus](https://github.com/sindresorhus/) and [wbinnssmith](https://github.com/wbinnssmith/awesome-promises).
+
 ```javascript
 import {promising} from 'kahn'
 
