@@ -1,7 +1,7 @@
 // Promisify a callback-style function
 // const data = await pify(fs.readFile)('package.json', 'utf8');
 import pify from "pify";
-export { pify as From };
+export { pify as Callback };
 
 /*
 
@@ -45,3 +45,11 @@ export { pImmediate as Immediately };
 // Promise queue with concurrency control
 import pQueue from "p-queue";
 export { pQueue as Queue };
+
+// wait for the next emission in the stream
+import { pEvent } from "p-event";
+export { pEvent as Listen };
+
+// Run multiple promise-returning & async functions with limited concurrency
+import pLimit from "p-limit";
+export { pLimit as Limit };

@@ -16,7 +16,7 @@ export { pForever as forever };
 
 // start a promise chain
 import pTry from "p-try";
-export { pTry as try };
+export { pTry as then };
 
 // Run promise-returning & async functions in series
 import pSeries from "p-series";
@@ -40,4 +40,4 @@ export { pLog as log };
 
 // check if a value is a promise
 import isPromise from "p-is-promise";
-export { isPromise as is };
+export { isPromise };

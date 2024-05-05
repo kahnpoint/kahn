@@ -32,4 +32,4 @@ export { pDelay as delay };
 
 // Measure the time a promise takes to resolve
 import pTime from "p-time";
-export { pTime as time };
+export { pTime as Time };

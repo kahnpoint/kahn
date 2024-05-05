@@ -23,4 +23,5 @@ export function repeated(
 export const create = encoding.createEncoder;
 export const writeByte = encoding.writeUint8;
 export const writeBytes = encoding.writeVarUint8Array;
+export const writeByteLength = encoding.writeUint8Array;
 export const toBytes = encoding.toUint8Array;

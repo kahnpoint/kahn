@@ -13,9 +13,9 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'kahn',
-      fileName: (format) => `kahn.${format}.js`
+      entry: path.resolve(__dirname, "src/index.ts"),
+      name: "kahn",
+      fileName: (format) => `kahn.${format}.js`,
     },
-  }
+  },
 });

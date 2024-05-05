@@ -25,3 +25,4 @@ export function repeated(
 export const create = decoding.createDecoder;
 export const readByte = decoding.readUint8;
 export const readBytes = decoding.readVarUint8Array;
+export const readByteLength = decoding.readUint8Array;

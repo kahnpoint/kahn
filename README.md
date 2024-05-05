@@ -2,14 +2,16 @@
 
 My current collection of Typescript utility functions.
 Some of these will be stripped out as I find what functions I use the most.
-*In the future I plan to make the exports more modular, like how lodash has `lodash/` for individual functions.*
+_In the future I plan to make the exports more modular, like how lodash has `lodash/` for individual functions._
 
 ## Categories
+
 - [Reexports](#reexports)
 - [Bytes](#bytes)
 - [Crypto](#krypto)
 - [Encoding and Decoding](#encoding-and-decoding)
 - [Iterating](#iterating)
+- [Promising](#promising)
 - [Constants](#constants)
 - [Types](#types)
 
@@ -45,6 +47,11 @@ bytes.toString(b: Bytes): string
 // base58 (xmr)
 bytes.fromBase58(base58: string): Bytes
 bytes.toBase58(b: Bytes): string
+bytes.alphabetBase58(): string
+// base64
+bytes.fromBase64(base64: string): Bytes
+bytes.toBase64(b: Bytes): string
+bytes.alphabetBase64(): string // url-safe, no padding
 // timestamps
 bytes.fromTimestamp(date: Date): Bytes
 bytes.toTimestamp(b: Bytes): Date
@@ -136,7 +143,7 @@ type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
 
 ### Encoding and Decoding
 
-Mostly the same as [lib0/encoding](https://www.npmjs.com/package/lib0) and  [lib0/decoding](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
+Mostly the same as [lib0/encoding](https://www.npmjs.com/package/lib0) and [lib0/decoding](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
 
 ```javascript
 const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)];
@@ -166,12 +173,16 @@ import {iterating} from 'kahn'
 /* Create */
 
 // Create an iterable that can be pushed to
-//const iter = iterating.pushable().push(0)
 iterating.Pushable(): Pushable<T>
+/*
+  const iter = iterating.Pushable().push(0)
+*/
 
 // allow for peeking at the next value
-// const nextValue = iterating.peekable([0, 1, 2]).peek()
 iterating.Peekable(iterable: Iterable<T>): AsyncIterable<T>
+/*
+  const nextValue = iterating.Peekable([0, 1, 2]).peek()
+*/
 
 // allow for recovering from errors
 iterating.Recoverable(err => {
@@ -185,18 +196,25 @@ iterating.Recoverable(err => {
 
 // emits events for each value
 iterating.Emitter(iterable: AsyncIterable<any>)
-// emitter.on('value', (v) => console.log(v))
-// emitter.on('end', () => console.log('done'))
-// emitter.on('error', (err) => console.error(err))
-// await emitter.cancel() // to end early
+/*
+  const emitter = iterating.Emitter([0, 1, 2])
+  emitter.on('value', (v) => console.log(v))
+  emitter.on('end', () => console.log('done'))
+  emitter.on('error', (err) => console.error(err))
+  await emitter.cancel() // to end early
+*/
 
 // Unidirecctional duplex stream
-// const [sink, source] = iterating.portal()
 iterating.Portal()
+/*
+  const [sink, source] = iterating.portal()
+*/
 
 // Bidirectional duplex streams
-// const [orange, blue] = iterating.portals()
 iterating.Portals()
+/*
+  const [orange, blue] = iterating.portals()
+*/
 
 /* Actions */
 
@@ -264,12 +282,212 @@ iterating.pipe(source: Iterable<T>, ...sinks: Iterable<T>[]): AsyncIterable<T>
 iterating.split(iterable: Iterable<Uint8Array>, delimiter?: Uint8Array): AsyncIterable<Uint8Array>
 
 // Batch values into chunks of a certain size
-// iterating.batch([0, 1, 2, 3, 4], 2) => [[0, 1], [2, 3], [4]]
 iterating.batch(iterable: Iterable<T>, size: number): AsyncIterable<T[]>
+/*
+  iterating.batch([0, 1, 2, 3, 4], 2) => [[0, 1], [2, 3], [4]]
+*/
 
 // Regularize values into chunks of a certain size
-// iterating.rebatch([[0, 1, 2], [3], [4]], 2) => [[0, 1], [2, 3], [4]]
 iterating.rebatch(iterable: Iterable<T[]>): AsyncIterable<T>
+/*
+  iterating.rebatch([[0, 1, 2], [3], [4]], 2) => [[0, 1], [2, 3], [4]]
+*/
+
+```
+
+### Promising
+
+```javascript
+import {promising} from 'kahn'
+
+/* Create */
+
+// Converts a callback function to a promise
+promising.Callback(func: () => Promise<T>): Promise<T>
+
+// Create a mutex
+promising.Mutex()
+/*
+  const mutex = promising.Mutex();
+  const sharedArray = [];
+  async function addToSharedArray(item) {
+    await mutex.withLock(async () => {
+      const item = await getItem();
+      sharedArray.push(item);
+    });
+  }
+*/
+
+// Memoize promise-returning & async functions
+promising.Memoize(func: () => Promise<T>): () => Promise<T>
+
+// create a promise that can be canceled
+promising.Cancelable<T>(promise: Promise<T>): CancelablePromise<T>
+
+// Create a lazy promise that defers execution until it's awaited
+// or when .then() or .catch() is called
+promising.Lazy<T>(func: () => Promise<T>): LazyPromise<T>
+
+// Returns a promise resolved in the next event loop - think setImmediate()
+promising.Immediately<T>(func: () => Promise<T>): Promise<T>
+
+// Promise queue with concurrency control
+promising.Queue<T>(concurrency: number): Queue<T>
+
+// Wait for the next emission in the stream
+promising.Listen<T>(stream: AsyncIterable<T>, event: string): Promise<T>
+/*
+  const result = await promising.Listen(emitter, 'finish');
+*/
+
+// Run multiple promise-returning & async functions with limited concurrency
+promising.Limit<T>(concurrency: number, tasks: Function[]): Promise<T[]>
+/*
+const limit = promising.Limit(1);
+
+const input = [
+	limit(() => fetchSomething('foo')),
+	limit(() => fetchSomething('bar')),
+	limit(() => doSomething())
+];
+
+// Only one promise is run at once
+const result = await Promise.all(input);
+*/
+
+// rate limit a promise
+export { pThrottle as throttle };
+promising.Throttle<T>(func: () => Promise<T>, limit: number, interval: number): Promise<T>
+/*
+const throttle = promising.Throttle({
+	limit: 2,
+	interval: 1000
+});
+const throttled = throttle(async index => {...});
+*/
+
+/* Flow */
+
+// Compose promise-returning & async functions into a reusable pipeline
+promising.pipe(source: () => Promise<T>, ...sinks: Function[]): () => Promise<T>
+
+// Run promise-returning & async functions in series, each passing its result to the next
+promising.chain(tasks: Function[]): () => Promise<T>
+
+// While a condition returns true, calls a function repeatedly, and then resolves the promise
+promising.while(condition: () => boolean, func: () => Promise<T>): Promise<T>
+
+// Run promise-returning & async functions until you end it with .end()
+promising.forever(condition: () => boolean, func: () => Promise<T>): Promise<T>
+
+// Start a promise chain without needing an initial promise
+promising.then(func: () => Promise<T>): Promise<T>
+
+// Run promise-returning & async functions in series
+promising.serial(tasks: Function[]): Promise<T>
+
+// Break out of a promise chain, returning a value
+promising.break(value: any): Promise<T>
+/*
+  getData()
+    .then(promising.break('done'))
+    .catch(promising.break.end)
+*/
+
+// Conditional promise chains, for use inside .then()
+promising.if(condition: () => boolean, func: () => Promise<T>): Promise<T>
+/*
+  getData()
+    .then(promising.if(process.env.NODE_ENV !== 'production', addDebugInfo))
+*/
+
+// Tap into a promise chain without affecting its value or state
+promising.peek(func: () => void): Promise<T>
+/*
+  getData()
+    .then(promising.peek(console.log)) // logs the data
+    .then(doSomething)
+*/
+
+// Log the value/error of a promise, shortcut for peek(console.log)
+promising.log(): Promise<T>
+
+// Check if a value is a promise
+promising.isPromise(value: any): boolean
+
+/* Mapping */
+
+// Map over promises concurrently
+promising.map<T>(iterable: Iterable<T>, func: (item: T) => Promise<T>, options: {concurrency: number}): Promise<T[]>
+/*
+  await promising.map(sites, mapper, {concurrency: 2});
+*/
+
+// Run multiple promises concurrently and keep track of the fulfilled values by name
+promising.props(promises: { [key: string]: Promise<T> }): Promise<{ [key: string]: T }>
+
+// Have a promise to fulfill no matter what
+promising.anyways<T>(promise: Promise<T>, fallback: T): Promise<T>
+/*
+const promises = [...];
+const results = await Promise.all(promises.map(promising.anyways));
+*/
+
+// Filter out values that don't satisfy a condition
+promising.filter<T>(iterable: Iterable<T>, func: (item: T) => Promise<boolean>, options: {concurrency: number}): Promise<T[]>
+
+// Reduce a list of values using promises into a promise for a value
+promising.reduce<T, U>(iterable: Iterable<T>, func: (acc: U, item: T) => Promise<U>, initialValue: U): Promise<U>
+
+// Create an array of the results of a list of promises
+promising.list<T>(iterable: Iterable<Promise<T>>): Promise<T[]>
+/*
+const promises = [...]
+console.log(await promising.collect(files));
+*/
+
+// Apply a function to each item in the iterable
+promising.apply<T>(source: Iterable<T>, func: (item: T) => Promise<void>): Promise<void>
+
+// Run promise-returning & async functions a specific number of times concurrently
+promising.times<T>(count: number, func: () => Promise<T>): Promise<T[]>
+
+/* Resolving */
+
+// Wait for all promises to be resolved
+promising.collect<T>(iterable: Iterable<Promise<T>>): Promise<T[]>
+
+// get the first promise that resolves
+promising.first<T>(iterable: Iterable<Promise<T>>): Promise<T>
+
+// get the first n promises that resolve
+promising.firstCount<T>(iterable: Iterable<Promise<T>>, n: number): Promise<T[]>
+
+// Get the first fulfilled promise that satisfies the provided testing function
+promising.firstMatch<T>(iterable: Iterable<Promise<T>>, func: (item: T) => boolean): Promise<T>
+
+/* Timing */
+// Retries a promise a number of times
+promising.retry<T>(func: (attemptCount: number) => PromiseLike<T> | T, options?: Options): Promise<T>
+
+// Wait for a promise to resolve, with a timeout
+promising.wait(milliseconds: number): Promise<T>
+
+// debounce a promise
+promising.debounce<T>(func: () => Promise<T>, wait: number): Promise<T>
+
+// timeout a promise
+promising.timeout<T>(promise: Promise<T>, milliseconds: number): Promise<T>
+
+// Wait for a condition to be true
+promising.when(condition: () => boolean, options?: Options): Promise<void>
+
+// Delay a promise a minimum amount of time
+promising.delay<T>(promise: Promise<T>, milliseconds: number): Promise<T>
+
+// Measure the time a promise takes to resolve
+promising.time<T>(promise: Promise<T>): Promise<{ value: T, time: number }>
+
 ```
 
 ### Constants

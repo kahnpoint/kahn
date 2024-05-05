@@ -7,7 +7,7 @@
 import pMap from "p-map";
 export { pMap as map };
 
-// Useful when you need to run multiple promises concurrently and keep track of the fulfilled values by name.
+// Run multiple promises concurrently and keep track of the fulfilled values by name.
 import pProps from "p-props";
 export { pProps as props };
 
@@ -25,7 +25,7 @@ export { pReduce as reduce };
 
 // create an array of the results
 import pSettle from "p-settle";
-export { pSettle as settle };
+export { pSettle as list };
 
 // Iterate over promises serially
 import pEachSeries from "p-each-series";

@@ -6,7 +6,7 @@ import {
   hexToBytes,
   utf8ToBytes,
 } from "@noble/ciphers/utils";
-import { base58xmr as base58 } from "@scure/base";
+import { base58xmr as base58, base64urlnopad as base64 } from "@scure/base";
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {
@@ -62,6 +62,20 @@ export function toBase58(bytes: Bytes): string {
 }
 export function fromBase58(str: string): Bytes {
   return base58.decode(str);
+}
+export function alphabetBase58() {
+  return "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+}
+
+// base64 strings
+export function toBase64(bytes: Bytes): string {
+  return base64.encode(bytes);
+}
+export function fromBase64(str: string): Bytes {
+  return base64.decode(str);
+}
+export function alphabetBase64() {
+  return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 }
 
 // binary strings (not recommended)

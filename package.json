@@ -4,9 +4,6 @@
   "description": "Adam's utility functions",
   "keywords": [],
   "main": "src/index.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "test": "bash scripts/sh/vitest.sh",
     "fmt": "prettier --write .",
