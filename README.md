@@ -487,7 +487,7 @@ promising.when(condition: () => boolean, options?: Options): Promise<void>
 promising.delay<T>(promise: Promise<T>, milliseconds: number): Promise<T>
 
 // Measure the time a promise takes to resolve
-promising.time<T>(promise: Promise<T>): Promise<{ value: T, time: number }>
+promising.time<T>(promise: Promise<T>): Promise<{ value: T, time: number }>k
 ```
 
 ### Constants

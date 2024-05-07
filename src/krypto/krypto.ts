@@ -5,7 +5,7 @@ import {
   x25519 as xd,
 } from "@noble/curves/ed25519";
 import * as bytes from "../bytes";
-import { EncryptedBytes, DecryptedBytes } from "../bytes";
+import { Bytes, DecryptedBytes, EncryptedBytes } from "../bytes/types";
 import {
   AnyKey,
   Checksum,
@@ -55,7 +55,6 @@ export function decrypt(sharedKey: SharedKey, data: Bytes): DecryptedBytes {
  * Crc
  */
 import * as crc32 from "crc-32";
-import { Bytes } from "../bytes";
 export const createChecksum = (digest: Bytes): Checksum => crc32.buf(digest);
 export const verifyChecksum = (digest: Bytes, checksum: Checksum) =>
   crc32.buf(digest) === checksum;
@@ -74,6 +73,7 @@ export function createKeyPair(privateKey?: PrivateKey): KeyPair {
   return {
     publicKey: bytes.toBase58(ed.getPublicKey(privateKeyBytes)),
     privateKey,
+    joined: `${bytes.toBase58(ed.getPublicKey(privateKeyBytes))}:${privateKey}`,
   };
 }
 

@@ -13,5 +13,6 @@ export type SharedKeyBytes = Bytes;
 export type KeyPair = {
   publicKey: PublicKey;
   privateKey: PrivateKey;
+  joined: JoinedKeyPair;
 };
 export type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
