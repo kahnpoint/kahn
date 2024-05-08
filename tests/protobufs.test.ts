@@ -1,20 +1,20 @@
-import { test, expect } from "vitest";
+import { test, expect } from 'vitest'
 //import protobufjs from "protobufjs";
 
-import { Message, Type, Field, OneOf } from "protobufjs/index.ts"; // respectively "./node_modules/protobufjs/light.js"
+import { Message, Type, Field, OneOf } from 'protobufjs/index.ts' // respectively "./node_modules/protobufjs/light.js"
 
 export class AwesomeSubMessage extends Message<AwesomeSubMessage> {
-  @Field.d(1, "string")
-  public awesomeString: string;
+	@Field.d(1, 'string')
+	public awesomeString: string
 
-  constructor(properties?: Partial<AwesomeSubMessage>) {
-    super(properties);
-  }
+	constructor(properties?: Partial<AwesomeSubMessage>) {
+		super(properties)
+	}
 }
 
 export enum AwesomeEnum {
-  ONE = 1,
-  TWO = 2,
+	ONE = 1,
+	TWO = 2,
 }
 
 /*
@@ -37,12 +37,12 @@ export class AwesomeMessage extends Message<AwesomeMessage> {
 }
 */
 
-test("protobufs", async () => {
-  // example code
-  //const message = new AwesomeSubMessage({ awesomeString: "hello" });
-  //expect(message.awesomeString).toBe("hello");
-  //const buffer  = AwesomeSubMessage.encode(message).finish();
-  //const decoded = AwesomeSubMessage.decode(buffer);
-  ////console.log(decoded.awesomeString); // "hello"
-  //expect(decoded.awesomeString).toBe("hello");
-});
+test('protobufs', async () => {
+	// example code
+	//const message = new AwesomeSubMessage({ awesomeString: "hello" });
+	//expect(message.awesomeString).toBe("hello");
+	//const buffer  = AwesomeSubMessage.encode(message).finish();
+	//const decoded = AwesomeSubMessage.decode(buffer);
+	////console.log(decoded.awesomeString); // "hello"
+	//expect(decoded.awesomeString).toBe("hello");
+})

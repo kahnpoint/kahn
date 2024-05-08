@@ -1,18 +1,18 @@
 //crypto
-import { Bytes } from "../bytes/types";
-export type Hash = string;
-export type Signature = string;
-export type Checksum = number;
-export type AnyKey = string;
-export type PublicKey = AnyKey;
-export type PrivateKey = AnyKey;
-export type SharedKey = AnyKey;
-export type PublicKeyBytes = Bytes;
-export type PrivateKeyBytes = Bytes;
-export type SharedKeyBytes = Bytes;
+import { Bytes } from '../bytes/types'
+export type Checksum = number
+export type Key = {
+	string: string
+	bytes: Bytes
+}
+export type Hash = Key
+export type Signature = Key
+
+export type PublicKey = Key
+export type PrivateKey = Key
+export type SharedKey = Key
+
 export type KeyPair = {
-  publicKey: PublicKey;
-  privateKey: PrivateKey;
-  joined: JoinedKeyPair;
-};
-export type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
+	publicKey: PublicKey
+	privateKey: PrivateKey
+}

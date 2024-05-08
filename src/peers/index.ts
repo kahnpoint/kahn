@@ -1,4 +1,4 @@
-export * from "./peers";
+export * from './peers'
 
 /*
 How to use simple-peer

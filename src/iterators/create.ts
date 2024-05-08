@@ -4,8 +4,8 @@ const source = pushable()
 source.push('hello')
 source.end()
 */
-import { pushable } from "it-pushable";
-export { pushable as Pushable };
+import { pushable } from 'it-pushable'
+export { pushable as Pushable }
 
 // Lets you look at the contents of an async iterator and decide what to do
 /*
@@ -13,8 +13,8 @@ const values = [0, 1, 2, 3, 4]
 const it = toPeekable(values)
 const first = it.peek()
 */
-import peekable from "it-peekable";
-export { peekable as Peekable };
+import peekable from 'it-peekable'
+export { peekable as Peekable }
 
 /*
 const source = recoverable(err => {
@@ -31,15 +31,15 @@ const source = recoverable(err => {
   }
 })
 */
-import recoverable from "recoverable-iterator";
-export { recoverable as Recoverable };
+import recoverable from 'recoverable-iterator'
+export { recoverable as Recoverable }
 
 export {
-  abortableSource,
-  abortableSink,
-  abortableTransform,
-  abortableDuplex,
-} from "abortable-iterator";
+	abortableSource,
+	abortableSink,
+	abortableTransform,
+	abortableDuplex,
+} from 'abortable-iterator'
 
 /*
 const emitter = it.emitter(asyncIterator)
@@ -58,30 +58,30 @@ await emitter.cancel()
 */
 
 enum EmitterEvent {
-  Value = "value",
-  Error = "error",
-  End = "end",
+	Value = 'value',
+	Error = 'error',
+	End = 'end',
 }
 
 type EmitterEventEmitter = EventEmitter<{
-  [EmitterEvent.Value]: [any];
-  [EmitterEvent.Error]: [Error];
-  [EmitterEvent.End]: [];
-}>;
+	[EmitterEvent.Value]: [any]
+	[EmitterEvent.Error]: [Error]
+	[EmitterEvent.End]: []
+}>
 
-import Emitterator from "emitterator";
-import { EventEmitter } from "events";
+import Emitterator from 'emitterator'
+import { EventEmitter } from 'events'
 
 export const Emitter = (source: AsyncIterable<any>): EmitterEventEmitter =>
-  new Emitterator(source);
+	new Emitterator(source)
 
 // One linked async iterator
-import { pair } from "it-pair";
+import { pair } from 'it-pair'
 export function Portal() {
-  const p = pair();
-  return p.sink, p.source;
+	const p = pair()
+	return p.sink, p.source
 }
 
 // Two linked async iterators
-import { duplexPair as Portals } from "it-pair/duplex";
-export { Portals };
+import { duplexPair as Portals } from 'it-pair/duplex'
+export { Portals }

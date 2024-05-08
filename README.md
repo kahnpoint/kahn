@@ -20,10 +20,10 @@ _In the future I plan to make the exports more modular, like how lodash has `lod
 ### Reexports
 
 ```javascript
-import { _ } from "kahn"; // lodash
-import { id } from "kahn"; // nanoid
-import { cache } from "kahn"; // lib0/cache
-import { ky } from "kahn"; // ky
+import { _ } from 'kahn' // lodash
+import { id } from 'kahn' // nanoid
+import { cache } from 'kahn' // lib0/cache
+import { ky } from 'kahn' // ky
 ```
 
 ### Bytes
@@ -146,21 +146,21 @@ type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
 Mostly the same as [lib0/encoding](https://www.npmjs.com/package/lib0) and [lib0/decoding](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
 
 ```javascript
-const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)];
+const randomBytes = [bytes.random(10), bytes.random(10), bytes.random(20)]
 
 // Encode
-import { encoding } from "kahn";
-const encoder = encoding.create();
-encoding.repeated(encoding.writeBytes, encoder, randomBytes);
-const serialized = encoding.toBytes(encoder);
+import { encoding } from 'kahn'
+const encoder = encoding.create()
+encoding.repeated(encoding.writeBytes, encoder, randomBytes)
+const serialized = encoding.toBytes(encoder)
 
 // Decode
-import { decoding } from "kahn";
-const decoder = decoding.create(serialized);
-const decodedBytes = decoding.repeated(decoding.readBytes, decoder);
-const deserialized = decoding.toBytes(decoder);
+import { decoding } from 'kahn'
+const decoder = decoding.create(serialized)
+const decodedBytes = decoding.repeated(decoding.readBytes, decoder)
+const deserialized = decoding.toBytes(decoder)
 
-randomBytes === decodedBytes; // true
+randomBytes === decodedBytes // true
 ```
 
 ### Iterating
@@ -493,12 +493,12 @@ promising.time<T>(promise: Promise<T>): Promise<{ value: T, time: number }>k
 ### Constants
 
 ```javascript
-export const B = 1;
-export const KB = 1024;
-export const MB = 1024 * KB;
-export const GB = 1024 * MB;
-export const TB = 1024 * GB;
-export const PB = 1024 * TB;
+export const B = 1
+export const KB = 1024
+export const MB = 1024 * KB
+export const GB = 1024 * MB
+export const TB = 1024 * GB
+export const PB = 1024 * TB
 ```
 
 ### Types

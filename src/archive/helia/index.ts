@@ -1,1 +1,1 @@
-export * from "./importHeliaPrivateKey";
+export * from './importHeliaPrivateKey'
