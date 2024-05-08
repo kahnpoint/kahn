@@ -1,10 +1,13 @@
-import _ from 'lodash'
+import * as _ from 'lodash' 
 export { _ }
 import * as id from 'nanoid'
 export { id }
 export * as cache from 'lib0/cache'
 import * as ky from 'ky'
 export { ky }
+//import * as zod from 'zod'
+import {z} from 'zod'
+export { z }
 
 // constants
 export * from './constants'
@@ -36,4 +39,4 @@ export * as strings from './strings'
 // promises
 export * as promising from './promising'
 
-export * as peering from './peers'
+//export * as peering from './peers'

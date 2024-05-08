@@ -1,6 +1,6 @@
 {
 	"name": "kahn",
-	"version": "0.1.3",
+	"version": "0.1.5",
 	"description": "Adam's utility functions",
 	"keywords": [],
 	"main": "src/index.js",
@@ -21,9 +21,6 @@
 		"@noble/secp256k1": "^2.0.0",
 		"@scure/base": "^1.1.5",
 		"@scure/bip39": "^1.2.2",
-		"@types/google-protobuf": "^3.15.12",
-		"@types/lodash": "^4.17.0",
-		"@types/simple-peer": "^9.11.8",
 		"abortable-iterator": "^5.0.1",
 		"blob-to-it": "^2.0.6",
 		"browser-readablestream-to-it": "^2.0.7",
@@ -110,7 +107,8 @@
 		"pify": "^6.1.0",
 		"recoverable-iterator": "^1.0.0",
 		"simple-peer": "^9.11.1",
-		"uint8arrays": "^5.0.3"
+		"uint8arrays": "^5.0.3",
+		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@rollup/plugin-inject": "^5.0.5",
@@ -118,6 +116,8 @@
 		"@types/jsdom": "^21.1.6",
 		"@types/react": "^18.2.64",
 		"@types/react-dom": "^18.2.21",
+		"@types/lodash": "^4.17.1",
+		"@types/simple-peer": "^9.11.8",
 		"@typescript-eslint/eslint-plugin": "^7.1.1",
 		"@typescript-eslint/parser": "^7.1.1",
 		"@vitejs/plugin-react": "^4.2.1",

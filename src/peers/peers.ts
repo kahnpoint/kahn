@@ -1,3 +1,4 @@
+/*
 // @ts-ignore
 import { Peer } from 'simple-peer-light'
 import type { Bytes } from '../bytes/types'
@@ -59,3 +60,4 @@ export enum Events {
 	Stream = 'stream',
 	Track = 'track',
 }
+*/
