@@ -6,6 +6,7 @@
 	"main": "src/index.js",
 	"scripts": {
 		"test": "bun test --watch",
+    "precommit": "pretty-quick --write",
 		"fmt": "pretty-quick --write .",
 		"v:dev": "vite",
 		"v:build": "tsc && vite build",
@@ -16,14 +17,8 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "lint-staged"
+			"pre-commit": "pretty-quick --write"
 		}
-	},
-	"lint-staged": {
-		"*.{ts,tsx,js,jsx,json,css,md,mdx}": [
-			"pretty-quick --write",
-			"git add"
-		]
 	},
 	"dependencies": {
 		"@noble/ciphers": "^0.5.1",

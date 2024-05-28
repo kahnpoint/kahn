@@ -37,7 +37,7 @@ test('keys', async () => {
 
 	expect(aliceSharedKey.bytes).toEqual(bobSharedKey.bytes)
 
-// encrypt/decrypt
+ // encrypt/decrypt
 
 let encrypted = aliceSharedKey.encrypt(testBytes)
 
