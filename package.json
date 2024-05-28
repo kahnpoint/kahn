@@ -11,7 +11,8 @@
 		"v:build": "tsc && vite build",
 		"v:preview": "vite preview",
 		"v:deploy": "vite build && npx wrangler pages deploy dist",
-		"publish": "vite build && npm publish --access public"
+		"publish": "vite build && npm publish --access public",
+		"prepare": "husky"
 	},
 	"husky": {
 		"hooks": {
