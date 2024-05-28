@@ -39,7 +39,7 @@ test('keys', async () => {
 
 	// encrypt/decrypt
 
-	let encrypted = aliceSharedKey.encrypt(testBytes)
+let encrypted = aliceSharedKey.encrypt(testBytes)
 
 let decrypted = bobSharedKey.decrypt(encrypted)
 
