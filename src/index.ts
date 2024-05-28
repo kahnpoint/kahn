@@ -22,7 +22,6 @@ export * from './bytes/types'
 
 // crypto
 export * as krypto from './krypto'
-export * from './krypto/types'
 
 // decoding
 export * as decoding from './decoding'
@@ -39,4 +38,5 @@ export * as strings from './strings'
 // promises
 export * as promising from './promising'
 
-//export * as peering from './peers'
+// protos
+export {proto} from './protos'

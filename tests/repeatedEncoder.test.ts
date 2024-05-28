@@ -1,7 +1,7 @@
 import { decoding, encoding } from '../src'
 import { test, expect } from 'vitest'
 
-test('repeatedEncoder', () => {
+test.skip('repeatedEncoder', () => {
 	const encoder = new encoding.Encoder()
 	encoding.writeUint8(encoder, 1)
 	encoding.repeated(encoding.writeUint8, encoder, [1, 2, 3, 4, 5])

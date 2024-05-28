@@ -1,12 +1,13 @@
 import type { Bytes } from './types'
 import {
 	bytesToHex,
+	numberToBytesBE,
 	bytesToNumberBE,
 	bytesToUtf8,
 	hexToBytes,
 	utf8ToBytes,
 } from '@noble/ciphers/utils'
-import { base58xmr as base58, base64urlnopad as base64 } from '@scure/base'
+import { base58xmr as base58, base64urlnopad as base64, base32 } from '@scure/base'
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {
@@ -28,12 +29,8 @@ export function fromHex(hex: string): Bytes {
 export function toNumber(bytes: Bytes): bigint {
 	return bytesToNumberBE(bytes)
 }
-export function fromNumber(n: number | bigint, len: number | null): Uint8Array {
-	const hex = n.toString(16)
-	if (len === null) {
-		len = Math.ceil(hex.length / 2)
-	}
-	return hexToBytes(hex.padStart(len * 2, '0'))
+export function fromNumber(n: number | bigint, len: number): Uint8Array {
+	return numberToBytesBE(n, len)
 }
 
 /*
@@ -54,6 +51,17 @@ export function toString(bytes: Bytes): string {
 }
 export function fromString(str: string): Bytes {
 	return new TextEncoder().encode(str)
+}
+
+// base32 strings
+export function toBase32(bytes: Bytes): string {
+	return base32.encode(bytes).toLowerCase()
+}
+export function fromBase32(str: string): Bytes {
+	return base32.decode(str.toUpperCase())
+}
+export function alphabetBase32() {
+	return 'abcdefghijklmnopqrstuvwxyz234567'
 }
 
 // base58 strings

@@ -22,9 +22,9 @@ _In the future I plan to make the exports more modular, like how lodash has `lod
 ```javascript
 import { _ } from 'kahn' // lodash
 import { id } from 'kahn' // nanoid
-import { cache } from 'kahn' // lib0/cache
 import { ky } from 'kahn' // ky
 ```
+<!-- import { cache } from 'kahn' // lib0/cache-->
 
 ### Bytes
 
@@ -34,31 +34,31 @@ import {bytes} from 'kahn'
 // conversions
 // buffer
 bytes.fromBuffer(buffer: ArrayBuffer): Bytes
-bytes.toBuffer(b: Bytes): ArrayBuffer
+bytes.toBuffer(data: Bytes): ArrayBuffer
 // hex
 bytes.fromHex(hex: string): Bytes
-bytes.toHex(b: Bytes): string
+bytes.toHex(data: Bytes): string
 // number
 bytes.fromNumber(num: number): Bytes
-bytes.toNumber(b: Bytes): number
+bytes.toNumber(data: Bytes): number
 // string
 bytes.fromString(str: string): Bytes
-bytes.toString(b: Bytes): string
+bytes.toString(data: Bytes): string
 // base58 (xmr)
 bytes.fromBase58(base58: string): Bytes
-bytes.toBase58(b: Bytes): string
+bytes.toBase58(data: Bytes): string
 bytes.alphabetBase58(): string
 // base64
 bytes.fromBase64(base64: string): Bytes
-bytes.toBase64(b: Bytes): string
+bytes.toBase64(data: Bytes): string
 bytes.alphabetBase64(): string // url-safe, no padding
 // timestamps
 bytes.fromTimestamp(date: Date): Bytes
-bytes.toTimestamp(b: Bytes): Date
+bytes.toTimestamp(data: Bytes): Date
 bytes.nowTimestamp(): Bytes
 // objects (JSON)
 bytes.fromObject(obj: object): Bytes
-bytes.toObject(b: Bytes): object
+bytes.toObject(data: Bytes): object
 
 // comparisons
 bytes.xor(b1: Bytes, b2: Bytes): Bytes
@@ -67,9 +67,9 @@ bytes.equal(b1: Bytes, b2: Bytes): boolean
 bytes.compare(b1: Bytes, b2: Bytes): Comparison // -1, 0, 1
 
 // manipulation
-bytes.concat(...b: Bytes[]): Bytes
-bytes.chunk(b: Bytes, chunkSize: number): ChunkedBytes
-bytes.unchunk(b: ChunkedBytes): Bytes
+bytes.concat(...data: Bytes[]): Bytes
+bytes.chunk(data: Bytes, chunkSize: number): ChunkedBytes
+bytes.unchunk(data: ChunkedBytes): Bytes
 
 // misc
 bytes.random(length: number): Bytes
@@ -92,55 +92,68 @@ enum ByteLengthOf {
 ```
 
 ### Krypto
-
-_(named weirdly to avoid conflict with Node/browser crypto packages)_
-
-Keys are Base58 strings. Even though they need to be converted to Bytes for use in the cryptographic functions from [@noble/curves](https://www.npmjs.com/package/@noble/curves), they are stored as strings to be able to be used as keys in objects. _If it becomes a performance issue, I will give the Keypair objects cached Bytes fields._
+*(named weirdly to avoid conflict with Node/browser crypto packages)*
 
 ```javascript
 import { krypto } from "kahn";
 
-// Hash - SHA256
-krypto.createHash(b: Bytes): Hash
-krypto.verifyHash(b: Bytes, hash: Hash): boolean
-
 // Checksum - CRC32
-krypto.createChecksum(b: Bytes): Checksum
-krypto.verifyChecksum(b: Bytes, checksum: Checksum): boolean
+krypto.Checksum.digest(data: Bytes): Checksum
+krypto.Checksum({value: number}).verify(data: Bytes): boolean
 
-// Symmetric Encryption - ChaCha20
-krypto.encrypt(sharedKey: SharedKey, b: Bytes): EncryptedBytes
-krypto.decrypt(sharedKey: SharedKey, b: Bytes): DecryptedBytes
+// FastHash - Blake3
+krypto.FastHash.digest(data: Bytes): FastHash
+krypto.FastHash({bytes: Bytes}).verify(data: Bytes): boolean
 
-// Asymmetric Encryption - ed25519
-krypto.createKeyPair(privateKey?: PrivateKey): KeyPair
-krypto.verifyKeyPair(keyPair: KeyPair): boolean
+// SaltHash - Blake3
+krypto.SaltHash.digest(data: Bytes, salt?: Salt): SaltHash
+krypto.SaltHash({bytes: Bytes}).verify(data: Bytes): boolean
 
-krypto.createSignature(privateKey: PrivateKey, b: Bytes): Signature
-krypto.verifySignature(publicKey: PublicKey, b: Bytes, signature: Signature): boolean
-
-// Key Exchange - x25519
-krypto.createSharedKey(privateKey: PrivateKey, publicKey: PublicKey): SharedKey
-krypto.verifySharedKey(privateKey: PrivateKey, publicKey: PublicKey, sharedKey: SharedKey): boolean
-
-// Types
-type Hash = string;
-type Signature = string;
-type Checksum = number;
-type AnyKey = string;
-type PublicKey = AnyKey;
-type PrivateKey = AnyKey;
-type SharedKey = AnyKey;
-type PublicKeyBytes = Bytes;
-type PrivateKeyBytes = Bytes;
-type SharedKeyBytes = Bytes;
-type KeyPair = {
-  publicKey: PublicKey;
-  privateKey: PrivateKey;
-};
-type JoinedKeyPair = `${PublicKey}:${PrivateKey}`;
+// SlowHash - Argon2 (always salted, has to be async because it's slow)
+krypto.SlowHash.digest(data: Bytes): Promise<SlowHash>
+krypto.SlowHash({bytes: Bytes}).verify(data: Bytes): Promise<boolean>
 ```
 
+### Ciphers
+
+### Keys
+
+```javascript
+import { krypto } from 'kahn'
+
+// HKDF - sha256
+// Key is extended by PublicKey, PrivateKey, SharedKey, and KeyPair
+krypto.Key({bytes: Bytes}).derive(salt: Bytes): SharedKey
+
+// Signatures (contains the publickey)
+krpto.Signature.sign(data: Bytes, keyPair: KeyPair): Signature
+krypto.Signature({bytes: Bytes}).verify(data: Bytes, publicKey: PublicKey): boolean
+
+// Keys - ed25519/x25519
+
+// Public Key
+krypto.PublicKey({bytes: Bytes}): PublicKey
+
+// Private Key - leave empty to generate a new private key
+krypto.PrivateKey({bytes: Bytes}): PrivateKey
+krypto.PrivateKey().toPublicKey()
+
+// Keypair - leave empty to generate a new keypair
+krypto.KeyPair({
+  privateKey?: PrivateKey, 
+  privateKeyBytes?: Bytes
+  })
+krypto.Keypair.vanity(prefix: string, timeout? Milliseconds): KeyPair
+
+krypto.Keypair().sign(data: Bytes): Signature // wraps Signature.sign
+
+krypto.Keypair().sharedKey(publicKey: PublicKey, salt?: Salt): SharedKey
+
+// Shared Key - Stream Cipher - ChaCha20
+krypto.SharedKey({bytes: Bytes}).encrypt(data: Bytes): EncryptedBytes
+krypto.SharedKey({bytes: Bytes}).decrypt(data: EncryptedBytes): Bytes
+```
+<!--
 ### Encoding and Decoding
 
 Mostly the same as [lib0/encoding](https://www.npmjs.com/package/lib0) and [lib0/decoding](https://www.npmjs.com/package/lib0), but with an additional `repeated` function that allows for decoding sequences of the same type, similar to the `repeated` function in [protobufjs](https://www.npmjs.com/package/protobufjs).
@@ -162,6 +175,7 @@ const deserialized = decoding.toBytes(decoder)
 
 randomBytes === decodedBytes // true
 ```
+-->
 
 ### Iterating
 
@@ -178,13 +192,13 @@ iterating.Pushable(): Pushable<T>
   const iter = iterating.Pushable().push(0)
 */
 
-// allow for peeking at the next value
+// Allows peeking at the next value
 iterating.Peekable(iterable: Iterable<T>): AsyncIterable<T>
 /*
   const nextValue = iterating.Peekable([0, 1, 2]).peek()
 */
 
-// allow for recovering from errors
+// Allows recovering from errors
 iterating.Recoverable(err => {
   // Called with no error when the iteration starts
   if (!err) {
@@ -194,7 +208,7 @@ iterating.Recoverable(err => {
   }
 })
 
-// emits events for each value
+// Emits events for each value
 iterating.Emitter(iterable: AsyncIterable<any>)
 /*
   const emitter = iterating.Emitter([0, 1, 2])
@@ -207,13 +221,23 @@ iterating.Emitter(iterable: AsyncIterable<any>)
 // Unidirecctional duplex stream
 iterating.Portal()
 /*
-  const [sink, source] = iterating.portal()
+  const [orange, blue] = iterating.portal()
+  iterating.pipe(emitter, orange)
+  iterating.pipe(blue, consumer)
+  
 */
 
 // Bidirectional duplex streams
 iterating.Portals()
 /*
   const [orange, blue] = iterating.portals()
+  
+  iterating.pipe(emitter, orange)
+  iterating.pipe(blue, consumer)
+  // and
+  iterating.pipe(emitter, blue)
+  iterating.pipe(orange, consumer)
+  
 */
 
 /* Actions */
@@ -258,7 +282,7 @@ iterating.reduce(
 	): Promise<U>
 
 // Sorts the values by a function
-iterating.sort(iterable: Iterable<T>, sorter: (a: T, b: T) => number): AsyncIterable<T>
+iterating.sort(iterable: Iterable<T>, sorter: (a: T, data: T) => number): AsyncIterable<T>
 
 // Applies a function to each item in the iterable
 iterating.apply(source: Iterable<T>,

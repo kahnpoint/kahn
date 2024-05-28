@@ -9,8 +9,13 @@ export function concat(...buffers: Bytes[]): Bytes {
 }
 
 // compare two byte buffers for equality
-export function equal(a: Bytes, b: Bytes): boolean {
+export function isEqual(a: Bytes, b: Bytes): boolean {
 	return equalBytes(a, b)
+}
+
+// split a byte buffer at a given index
+export function split(bytes: Bytes, index: number): [Bytes, Bytes] {
+	return [bytes.subarray(0, index), bytes.subarray(index)]
 }
 
 // generate random bytes
