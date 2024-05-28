@@ -13,7 +13,7 @@
 		"v:preview": "vite preview",
 		"v:deploy": "vite build && npx wrangler pages deploy dist",
 		"publish": "vite build && npm publish --access public",
-		"prepare": "husky"
+		"prepare": "pretty-quick --write && husky"
 	},
 	"husky": {
 		"hooks": {
