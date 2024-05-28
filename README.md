@@ -24,6 +24,7 @@ import { _ } from 'kahn' // lodash
 import { id } from 'kahn' // nanoid
 import { ky } from 'kahn' // ky
 ```
+
 <!-- import { cache } from 'kahn' // lib0/cache-->
 
 ### Bytes
@@ -92,7 +93,8 @@ enum ByteLengthOf {
 ```
 
 ### Krypto
-*(named weirdly to avoid conflict with Node/browser crypto packages)*
+
+_(named weirdly to avoid conflict with Node/browser crypto packages)_
 
 ```javascript
 import { krypto } from "kahn";
@@ -140,7 +142,7 @@ krypto.PrivateKey().toPublicKey()
 
 // Keypair - leave empty to generate a new keypair
 krypto.KeyPair({
-  privateKey?: PrivateKey, 
+  privateKey?: PrivateKey,
   privateKeyBytes?: Bytes
   })
 krypto.Keypair.vanity(prefix: string, timeout? Milliseconds): KeyPair
@@ -153,6 +155,7 @@ krypto.Keypair().sharedKey(publicKey: PublicKey, salt?: Salt): SharedKey
 krypto.SharedKey({bytes: Bytes}).encrypt(data: Bytes): EncryptedBytes
 krypto.SharedKey({bytes: Bytes}).decrypt(data: EncryptedBytes): Bytes
 ```
+
 <!--
 ### Encoding and Decoding
 
@@ -224,20 +227,20 @@ iterating.Portal()
   const [orange, blue] = iterating.portal()
   iterating.pipe(emitter, orange)
   iterating.pipe(blue, consumer)
-  
+
 */
 
 // Bidirectional duplex streams
 iterating.Portals()
 /*
   const [orange, blue] = iterating.portals()
-  
+
   iterating.pipe(emitter, orange)
   iterating.pipe(blue, consumer)
   // and
   iterating.pipe(emitter, blue)
   iterating.pipe(orange, consumer)
-  
+
 */
 
 /* Actions */

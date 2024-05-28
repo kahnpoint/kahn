@@ -25,4 +25,3 @@ export type Hours = number
 export type Days = number
 export type Weeks = number
 export type Years = number
-

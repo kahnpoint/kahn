@@ -7,7 +7,11 @@ import {
 	hexToBytes,
 	utf8ToBytes,
 } from '@noble/ciphers/utils'
-import { base58xmr as base58, base64urlnopad as base64, base32 } from '@scure/base'
+import {
+	base58xmr as base58,
+	base64urlnopad as base64,
+	base32,
+} from '@scure/base'
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {

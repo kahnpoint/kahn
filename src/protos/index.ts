@@ -1,2 +1,2 @@
 export * as proto from './proto'
-export {ProtoType} from './protoType'
+export { ProtoType } from './protoType'

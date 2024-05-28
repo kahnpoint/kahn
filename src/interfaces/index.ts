@@ -12,7 +12,7 @@ export interface Byteable<T> {
 
 export interface Hashable<T> {
 	create(data: Bytes): T
-	verify(data: Bytes): boolean	
+	verify(data: Bytes): boolean
 }
 
 export interface Derivable<T> {
@@ -22,4 +22,3 @@ export interface Derivable<T> {
 export interface Randomable<T> {
 	random(): T
 }
-
