@@ -9,7 +9,7 @@ _In the future I plan to make the exports more modular, like how lodash has `lod
 - [Reexports](#reexports)
 - [Bytes](#bytes)
 - [Crypto](#krypto)
-- [Encoding and Decoding](#encoding-and-decoding)
+- [Protobufs](#protobufs)
 - [Iterating](#iterating)
 - [Promising](#promising)
 - [Constants](#constants)
@@ -30,7 +30,7 @@ import { ky } from 'kahn' // ky
 ### Bytes
 
 ```javascript
-import {bytes} from 'kahn'
+import { bytes } from 'kahn'
 
 // conversions
 // buffer
@@ -45,14 +45,17 @@ bytes.toNumber(data: Bytes): number
 // string
 bytes.fromString(str: string): Bytes
 bytes.toString(data: Bytes): string
+// base32
+bytes.fromBase32(base32: string): Bytes
+bytes.toBase32(data: Bytes): string
 // base58 (xmr)
 bytes.fromBase58(base58: string): Bytes
 bytes.toBase58(data: Bytes): string
 bytes.alphabetBase58(): string
-// base64
+// base64 (url-safe, no padding)
 bytes.fromBase64(base64: string): Bytes
 bytes.toBase64(data: Bytes): string
-bytes.alphabetBase64(): string // url-safe, no padding
+bytes.alphabetBase64(): string
 // timestamps
 bytes.fromTimestamp(date: Date): Bytes
 bytes.toTimestamp(data: Bytes): Date
@@ -64,7 +67,7 @@ bytes.toObject(data: Bytes): object
 // comparisons
 bytes.xor(b1: Bytes, b2: Bytes): Bytes
 bytes.hamming(b1: Bytes, b2: Bytes): number
-bytes.equal(b1: Bytes, b2: Bytes): boolean
+bytes.isEqual(b1: Bytes, b2: Bytes): boolean
 bytes.compare(b1: Bytes, b2: Bytes): Comparison // -1, 0, 1
 
 // manipulation
@@ -96,12 +99,20 @@ enum ByteLengthOf {
 
 _(named weirdly to avoid conflict with Node/browser crypto packages)_
 
+#### Checksums
+
 ```javascript
 import { krypto } from "kahn";
 
 // Checksum - CRC32
 krypto.Checksum.digest(data: Bytes): Checksum
 krypto.Checksum({value: number}).verify(data: Bytes): boolean
+```
+
+#### Hashes
+
+```javascript
+import { krypto } from "kahn";
 
 // FastHash - Blake3
 krypto.FastHash.digest(data: Bytes): FastHash
@@ -116,24 +127,26 @@ krypto.SlowHash.digestAsync(data: Bytes): Promise<SlowHash>
 krypto.SlowHash({bytes: Bytes}).verifyAsync(data: Bytes): Promise<boolean>
 ```
 
-### Ciphers
+#### Signatures
 
-### Keys
+```javascript
+import { krypto } from "kahn";
+
+// Signatures (contains the publickey)
+krypto.Signature.sign(data: Bytes, keyPair: KeyPair): Signature
+krypto.Signature({bytes: Bytes}).verify(data: Bytes, publicKey: PublicKey): boolean
+```
+
+#### Keys
 
 ```javascript
 import { krypto } from 'kahn'
 
 // HKDF - sha256
-// Key is extended by PublicKey, PrivateKey, SharedKey, and KeyPair
+// PublicKey, PrivateKey, and SharedKey are all extended from Key
 krypto.Key({bytes: Bytes}).derive(salt: Bytes): SharedKey
 
-// Signatures (contains the publickey)
-krpto.Signature.sign(data: Bytes, keyPair: KeyPair): Signature
-krypto.Signature({bytes: Bytes}).verify(data: Bytes, publicKey: PublicKey): boolean
-
-// Keys - ed25519/x25519
-
-// Public Key
+// Public Key - curve25519
 krypto.PublicKey({bytes: Bytes}): PublicKey
 
 // Private Key - leave empty to generate a new private key
@@ -147,8 +160,8 @@ krypto.KeyPair({
   })
 krypto.Keypair.vanity(prefix: string, timeout? Milliseconds): KeyPair
 
+// Signatures
 krypto.Keypair().sign(data: Bytes): Signature // wraps Signature.sign
-
 krypto.Keypair().sharedKey(publicKey: PublicKey, salt?: Salt): SharedKey
 
 // Shared Key - Stream Cipher - ChaCha20
@@ -180,12 +193,44 @@ randomBytes === decodedBytes // true
 ```
 -->
 
+### Protobufs
+
+This is mostly just a reexport of [protobufjs](https://www.npmjs.com/package/protobufjs) with a few extra functions.
+
+```javascript
+import { proto } from 'kahn'
+
+// proto reexports from protobufjs/light
+// it has the following aliases for decorators
+proto.type // proto.Type.d
+proto.field // proto.Field.d
+proto.oneOf // proto.OneOf.d
+proto.map // proto.MapField.d
+
+import { ProtoType } from 'kahn'
+// ProtoType<T> is a shim for proto.Message<T>
+// usage:
+//    class MyClass extends ProtoType<MyClass>{}
+// it adds the following serializion and deserializion functions:
+//   - toBytes() and fromBytes() - Uint8Array
+//   - toString() and fromString() - base32
+ProtoType<T>
+
+
+import { Timestamp } from 'kahn'
+// Timestamp is a representation of google.protobuf.Timestamp
+// it has the following serializion and deserializion functions:
+Timestamp.fromDate()
+Timestamp.fromNow()
+Timestamp().toDate()
+```
+
 ### Iterating
 
 Renamed iterator functions from [it](https://github.com/achingbrain/it).
 
 ```javascript
-import {iterating} from 'kahn'
+import { iterating } from 'kahn'
 
 /* Create */
 
@@ -327,7 +372,7 @@ iterating.rebatch(iterable: Iterable<T[]>): AsyncIterable<T>
 Renamed promise functions from [sindresorhus](https://github.com/sindresorhus/) and [wbinnssmith](https://github.com/wbinnssmith/awesome-promises).
 
 ```javascript
-import {promising} from 'kahn'
+import { promising } from 'kahn'
 
 /* Create */
 
@@ -520,17 +565,29 @@ promising.time<T>(promise: Promise<T>): Promise<{ value: T, time: number }>k
 ### Constants
 
 ```javascript
+// Bytes
 export const B = 1
 export const KB = 1024
 export const MB = 1024 * KB
 export const GB = 1024 * MB
 export const TB = 1024 * GB
 export const PB = 1024 * TB
+
+// Time
+export const NS = 1
+export const MS = 1
+export const SECONDS = 1000 * MS
+export const MINUTES = 60 * SECONDS
+export const HOURS = 60 * MINUTES
+export const DAYS = 24 * HOURS
+export const WEEKS = 7 * DAYS
+export const YEARS = 365 * DAYS
 ```
 
 ### Types
 
 ```javascript
+// Comparison
 enum Comparison {
   LessThan = -1,
   Equal = 0,
@@ -541,4 +598,14 @@ export enum Ternary {
   Unknown = 0,
   True = 1,
 }
+
+// Time
+export type Nanoseconds = number
+export type Milliseconds = number
+export type Seconds = number
+export type Minutes = number
+export type Hours = number
+export type Days = number
+export type Weeks = number
+export type Years = number
 ```

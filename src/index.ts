@@ -39,4 +39,4 @@ export * as strings from './strings'
 export * as promising from './promising'
 
 // protos
-export { proto } from './protos'
+export * from './protos'

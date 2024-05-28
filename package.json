@@ -1,17 +1,14 @@
 {
 	"name": "kahn",
-	"version": "0.1.5",
+	"version": "0.2.1",
 	"description": "Adam's utility functions",
 	"keywords": [],
 	"main": "src/index.js",
 	"scripts": {
 		"test": "bun test --watch",
 		"fmt": "pretty-quick --write .",
-		"v:dev": "vite",
-		"v:build": "tsc && vite build",
-		"v:preview": "vite preview",
-		"v:deploy": "vite build && npx wrangler pages deploy dist",
-		"publish": "vite build && npm publish --access public",
+		"vite": "vite",
+		"publish": "npm publish --access public",
 		"prepare": "husky && husky install"
 	},
 	"dependencies": {
