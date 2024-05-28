@@ -6,19 +6,13 @@
 	"main": "src/index.js",
 	"scripts": {
 		"test": "bun test --watch",
-    "precommit": "pretty-quick --write",
 		"fmt": "pretty-quick --write .",
 		"v:dev": "vite",
 		"v:build": "tsc && vite build",
 		"v:preview": "vite preview",
 		"v:deploy": "vite build && npx wrangler pages deploy dist",
 		"publish": "vite build && npm publish --access public",
-		"prepare": "pretty-quick --write && husky"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "pretty-quick --write"
-		}
+		"prepare": "husky && husky install"
 	},
 	"dependencies": {
 		"@noble/ciphers": "^0.5.1",
@@ -178,5 +172,8 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/kahnpoint/kahn.git"
+	},
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx,css,md,mdx}": "prettier --write"
 	}
 }
