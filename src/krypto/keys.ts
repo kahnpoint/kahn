@@ -13,6 +13,8 @@ import { bytes, proto } from "@/index"
 import { chacha20poly1305 } from '@noble/ciphers/chacha'
 import { managedNonce } from '@noble/ciphers/webcrypto'
 import { ProtoType } from "@/protos/protoType"
+import type { Salt } from "./salt"
+import { blake3 } from "@noble/hashes/blake3"
 const chacha = managedNonce(chacha20poly1305)
 
 
@@ -183,9 +185,9 @@ export class KeyPair extends ProtoType<KeyPair> implements KeyPairable{
 		return Signature.sign(data, this)
 	}
 	
-	sharedKey(publicKey: PublicKey): SharedKey {
+	sharedKey(publicKey: PublicKey, salt?: Salt): SharedKey {
 		const sharedKey = xd.getSharedSecret(this.privateKey.toMontgomery(), publicKey.toMontgomery())
-		return new SharedKey({ bytes: sharedKey })
+		return new SharedKey({ bytes: blake3(bytes.concat(sharedKey, salt ? salt.bytes : bytes.create(0))) })
 	}
 	
 	

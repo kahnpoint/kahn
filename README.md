@@ -110,8 +110,8 @@ krypto.SaltHash.digest(data: Bytes, salt?: Salt): SaltHash
 krypto.SaltHash({bytes: Bytes}).verify(data: Bytes): boolean
 
 // SlowHash - Argon2 (always salted, has to be async because it's slow)
-krypto.SlowHash.digest(data: Bytes): Promise<SlowHash>
-krypto.SlowHash({bytes: Bytes}).verify(data: Bytes): Promise<boolean>
+krypto.SlowHash.digestAsync(data: Bytes): Promise<SlowHash>
+krypto.SlowHash({bytes: Bytes}).verifyAsync(data: Bytes): Promise<boolean>
 ```
 
 ### Ciphers

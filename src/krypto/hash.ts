@@ -34,14 +34,14 @@ export class SaltHash extends VersionedBytes<SaltHash> {
 		
 		// Check if salt is valid
 		if (salt && salt.bytes.length !== SALT_HASH_SALT_LENGTH_BYTES) {
-			throw new Error('Salt must be 32 bytes long')
+			throw new Error(`Salt must be ${SALT_HASH_SALT_LENGTH_BYTES} bytes long`)
 		}
 		
 		return new SaltHash({ bytes: bytes.concat(salt.bytes,blake3(bytes.concat(salt.bytes, data))) })
 	}
 	
 	verify(data: Bytes, salt: Salt): boolean {
-		return bytes.isEqual(this.bytes, blake3(bytes.concat(salt.bytes, data)))
+		return bytes.isEqual(this.bytes, bytes.concat(salt.bytes,blake3(bytes.concat(salt.bytes, data))))
 	}	
 }
 
@@ -51,7 +51,7 @@ export class SaltHash extends VersionedBytes<SaltHash> {
 const SLOW_HASH_SALT_LENGTH_BYTES = 32
 export class SlowHash extends VersionedBytes<SlowHash> {
 
-	async digest(data: Bytes, salt? : Salt): Promise<SlowHash> {
+	static async digestAsync(data: Bytes, salt? : Salt): Promise<SlowHash> {
 		
 		salt = salt ?? new Salt({saltLength: SLOW_HASH_SALT_LENGTH_BYTES})
 		
@@ -68,14 +68,14 @@ export class SlowHash extends VersionedBytes<SlowHash> {
 			memorySize: 512, // use 512KB memory
 			hashLength: 32, // output size = 32 bytes
 			outputType: 'encoded', // return standard encoded string containing parameters needed to verify the key
-		}).then(key => {
-			return new SlowHash({ bytes: bytes.fromString(key) })
+		}).then(hash => {
+			return new SlowHash({ bytes: bytes.fromString(hash) })
 		}).catch(err => {
 			throw new Error(err)
 		});
 	}
 	
-	async verify(data: Bytes): Promise<boolean> {
+	async verifyAsync(data: Bytes): Promise<boolean> {
 		return argon2Verify({
 			password: bytes.toString(data), 
 			hash: bytes.toString(this.bytes)
