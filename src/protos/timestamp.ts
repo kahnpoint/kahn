@@ -1,11 +1,11 @@
-import * as proto from './proto'
-import { ProtoType } from './protoType'
+import { Typed } from './typedShim'
+import { proto } from '@/index'
 
 /**
  * Timestamp - google.protobuf.Timestamp
  */
 @proto.type('Timestamp')
-export class Timestamp extends ProtoType<Timestamp> {
+export class Timestamp extends Typed<Timestamp> {
 	@proto.field(0, 'int64', 'required')
 	public seconds: bigint
 

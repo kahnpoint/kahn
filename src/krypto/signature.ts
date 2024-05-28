@@ -1,5 +1,5 @@
-import { VersionedBytes } from '@/bytes'
 import type { Bytes } from '@/index'
+import { proto } from '@/index'
 import { ed25519 as ed } from '@noble/curves/ed25519'
 import { KeyPair } from './keyPair'
 import { PublicKey } from './keys'
@@ -11,7 +11,10 @@ interface Signable {
 	// create(data: Bytes, privateKey: PrivateKey): Signature
 	verify(data: Bytes, publicKey: PublicKey): boolean
 }
-export class Signature extends VersionedBytes<Signature> implements Signable {
+export class Signature
+	extends proto.VersionedBytes<Signature>
+	implements Signable
+{
 	static sign(data: Bytes, keyPair: KeyPair): Signature {
 		const signature = ed.sign(data, keyPair.privateKey.bytes)
 		return new Signature({ bytes: signature })

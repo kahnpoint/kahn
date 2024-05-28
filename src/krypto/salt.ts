@@ -1,8 +1,7 @@
-import { bytes } from '@/index'
 import type { Bytes } from '@/index'
-import { VersionedBytes } from '@/bytes'
+import { bytes, proto } from '@/index'
 
-export class Salt extends VersionedBytes<Salt> {
+export class Salt extends proto.VersionedBytes<Salt> {
 	constructor(options?: { bytes?: Bytes; saltLength?: number }) {
 		options = options || {}
 		options.bytes = options.bytes || bytes.random(options.saltLength || 32)

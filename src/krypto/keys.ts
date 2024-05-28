@@ -1,6 +1,4 @@
-import { VersionedBytes } from '@/bytes'
 import type { Bytes, EncryptedBytes } from '@/index'
-import type { Derivable } from '@/interfaces'
 import { chacha20poly1305 } from '@noble/ciphers/chacha'
 import { managedNonce } from '@noble/ciphers/webcrypto'
 import {
@@ -10,18 +8,20 @@ import {
 } from '@noble/curves/ed25519'
 import { hkdf } from '@noble/hashes/hkdf'
 import { sha256 } from '@noble/hashes/sha256'
+import type { Salt } from './salt'
 const chacha = managedNonce(chacha20poly1305)
+import { proto } from '@/index'
 
 /**
  * Key
  */
-export class Key extends VersionedBytes<Key> implements Derivable<Key> {
+export class Key extends proto.VersionedBytes<Key> {
 	constructor(options?: { bytes: Bytes }) {
 		super(options)
 	}
 
-	derive(salt: Bytes): Key {
-		const key = hkdf(sha256, this.bytes, undefined, salt, 32)
+	derive(salt: Salt): Key {
+		const key = hkdf(sha256, this.bytes, undefined, salt.bytes, 32)
 		return new Key({ bytes: key })
 	}
 }

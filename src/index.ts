@@ -9,6 +9,9 @@ export { ky }
 import { z } from 'zod'
 export { z }
 
+// protos - this one has to be first for some reason
+export * as proto from './protos'
+
 // constants
 export * from './constants'
 
@@ -37,6 +40,3 @@ export * as strings from './strings'
 
 // promises
 export * as promising from './promising'
-
-// protos
-export * from './protos'

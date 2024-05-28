@@ -132,7 +132,7 @@ krypto.SlowHash({bytes: Bytes}).verifyAsync(data: Bytes): Promise<boolean>
 ```javascript
 import { krypto } from "kahn";
 
-// Signatures (contains the publickey)
+// Signatures
 krypto.Signature.sign(data: Bytes, keyPair: KeyPair): Signature
 krypto.Signature({bytes: Bytes}).verify(data: Bytes, publicKey: PublicKey): boolean
 ```
@@ -143,8 +143,8 @@ krypto.Signature({bytes: Bytes}).verify(data: Bytes, publicKey: PublicKey): bool
 import { krypto } from 'kahn'
 
 // HKDF - sha256
-// PublicKey, PrivateKey, and SharedKey are all extended from Key
-krypto.Key({bytes: Bytes}).derive(salt: Bytes): SharedKey
+// Key is extended by PublicKey, PrivateKey, and SharedKey
+krypto.Key({bytes: Bytes}).derive(salt: Salt): SharedKey
 
 // Public Key - curve25519
 krypto.PublicKey({bytes: Bytes}): PublicKey
@@ -158,7 +158,8 @@ krypto.KeyPair({
   privateKey?: PrivateKey,
   privateKeyBytes?: Bytes
   })
-krypto.Keypair.vanity(prefix: string, timeout? Milliseconds): KeyPair
+// generate a keypair with a specific prefix in base32
+krypto.Keypair.vanityAsync(prefix: string, timeout? Milliseconds): Promise<KeyPair>
 
 // Signatures
 krypto.Keypair().sign(data: Bytes): Signature // wraps Signature.sign
@@ -207,22 +208,21 @@ proto.field // proto.Field.d
 proto.oneOf // proto.OneOf.d
 proto.map // proto.MapField.d
 
-import { ProtoType } from 'kahn'
-// ProtoType<T> is a shim for proto.Message<T>
-// usage:
-//    class MyClass extends ProtoType<MyClass>{}
-// it adds the following serializion and deserializion functions:
-//   - toBytes() and fromBytes() - Uint8Array
-//   - toString() and fromString() - base32
-ProtoType<T>
+// proto.Typed<T> is a shim for proto.Message<T>
+// it adds the following serialization and deserialization functions:
+//   - toBytes() and fromBytes() - Bytes
+//   - toString() and fromString() - base32 string
+proto.Typed<T>
 
+// proto.versionedBytes is a base struct for bytes need to have a version number
+// many krypto classes, such as keys, use this
+proto.VersionedBytes({bytes: Bytes, version?: number})
 
-import { Timestamp } from 'kahn'
-// Timestamp is a representation of google.protobuf.Timestamp
+// proto.Timestamp is a representation of google.protobuf.Timestamp
 // it has the following serializion and deserializion functions:
-Timestamp.fromDate()
-Timestamp.fromNow()
-Timestamp().toDate()
+proto.Timestamp.fromDate()
+proto.Timestamp.fromNow()
+proto.Timestamp().toDate()
 ```
 
 ### Iterating

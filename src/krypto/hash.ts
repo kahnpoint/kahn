@@ -1,14 +1,13 @@
-import { bytes } from '@/index'
 import type { Bytes } from '@/index'
+import { bytes, proto } from '@/index'
 import { blake3 } from '@noble/hashes/blake3'
-import { VersionedBytes } from '@/bytes'
 import { argon2id, argon2Verify } from 'hash-wasm'
 import { Salt } from './salt'
 
 /**
  * Fast Hash
  */
-export class FastHash extends VersionedBytes<FastHash> {
+export class FastHash extends proto.VersionedBytes<FastHash> {
 	static digest(data: Bytes): FastHash {
 		return new FastHash({
 			bytes: blake3(data),
@@ -24,7 +23,7 @@ export class FastHash extends VersionedBytes<FastHash> {
  * SaltHash (Salted Fast Hash)
  */
 const SALT_HASH_SALT_LENGTH_BYTES = 32
-export class SaltHash extends VersionedBytes<SaltHash> {
+export class SaltHash extends proto.VersionedBytes<SaltHash> {
 	static digest(data: Bytes, salt?: Salt): SaltHash {
 		salt = salt ?? new Salt({ saltLength: SALT_HASH_SALT_LENGTH_BYTES })
 
@@ -50,7 +49,7 @@ export class SaltHash extends VersionedBytes<SaltHash> {
  * Slow Hash (Salted Slow Hash)
  */
 const SLOW_HASH_SALT_LENGTH_BYTES = 32
-export class SlowHash extends VersionedBytes<SlowHash> {
+export class SlowHash extends proto.VersionedBytes<SlowHash> {
 	static async digestAsync(data: Bytes, salt?: Salt): Promise<SlowHash> {
 		salt = salt ?? new Salt({ saltLength: SLOW_HASH_SALT_LENGTH_BYTES })
 
