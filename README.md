@@ -9,6 +9,7 @@ _In the future I plan to make the exports more modular, like how lodash has `lod
 - [Reexports](#reexports)
 - [Bytes](#bytes)
 - [Crypto](#krypto)
+- [Mixins](#mixins)
 - [Protobufs](#protobufs)
 - [Iterating](#iterating)
 - [Promising](#promising)
@@ -46,7 +47,7 @@ bytes.toNumber(data: Bytes): number
 // string
 bytes.fromString(str: string): Bytes
 bytes.toString(data: Bytes): string
-// base32
+// base32 (lowercase, nopad)
 bytes.fromBase32(base32: string): Bytes
 bytes.toBase32(data: Bytes): string
 // base58 (xmr)
@@ -57,6 +58,10 @@ bytes.alphabetBase58(): string
 bytes.fromBase64(base64: string): Bytes
 bytes.toBase64(data: Bytes): string
 bytes.alphabetBase64(): string
+// emoji (ecojiV2, base 1024)
+bytes.fromEmoji(emoji: string): Bytes
+bytes.toEmoji(data: Bytes): string
+bytes.alphabetEmoji(): string
 // timestamps
 bytes.fromTimestamp(date: Date): Bytes
 bytes.toTimestamp(data: Bytes): Date
@@ -195,15 +200,29 @@ randomBytes === decodedBytes // true
 ```
 -->
 
+### Mixins
+
+This is an experimental function that combine classes, while keeping typesafety.
+Due to how Typescript's types work, in order to mix multiple classes, you have to nest the mixin calls.
+
+```javascript
+import { mixin } from 'kahn'
+
+// Create a mixin
+const MyMixedClass = mixin(MyClass, MyMixin)
+
+// Create a mixin of multiple classes
+const MyMultipleMixedClass = mixin(mixin(MyClass, MyMixin1), MyMixin2)
+```
+
 ### Protobufs
 
-This is mostly just a reexport of [protobufjs](https://www.npmjs.com/package/protobufjs) with a few extra functions.
+This is mostly just a reexport of [protobufjs/light](https://www.npmjs.com/package/protobufjs) with a few extra functions.
 
 ```javascript
 import { proto } from 'kahn'
 
-// proto reexports from protobufjs/light
-// it has the following aliases for decorators
+// decorator renamings for aesthetics
 proto.type // proto.Type.d
 proto.field // proto.Field.d
 proto.oneOf // proto.OneOf.d
@@ -215,7 +234,7 @@ proto.map // proto.MapField.d
 //   - toString() and fromString() - base32 string
 proto.Typed<T>
 
-// proto.versionedBytes is a base struct for bytes need to have a version number
+// proto.versionedBytes is a base struct for bytes that need to have a version
 // many krypto classes, such as keys, use this
 proto.VersionedBytes({bytes: Bytes, version?: number})
 

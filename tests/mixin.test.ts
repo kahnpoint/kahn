@@ -1,27 +1,5 @@
 import { test, expect } from 'bun:test'
-
-/**
- * Mixin a set of classes into a base class.
- * Usage:
- * mixin(MyClass, MyMixin1, MyMixin2, ...);
- */
-
-type Constructor<T = {}> = new (...args: any[]) => T
-
-function mixin<T extends Constructor, U extends Constructor[]>(
-	base: T,
-	...mixins: U
-): T & InstanceType<U[number]> {
-	mixins.forEach((mixin) => {
-		Object.getOwnPropertyNames(mixin.prototype).forEach((name) => {
-			if (name !== 'constructor') {
-				base.prototype[name] = mixin.prototype[name]
-			}
-		})
-	})
-
-	return base as T & InstanceType<U[number]>
-}
+import { mixin } from '@/misc'
 
 // usage:
 class User {
@@ -32,19 +10,34 @@ class User {
 	}
 }
 
-const sayHiMixin = class {
+class sayHiMixin {
 	sayHi() {
 		console.log(`Hello ${this.name}`)
 	}
+}
+
+class sayByeMixin {
 	sayBye() {
-		console.log(`Bye ${this.name}`)
+		console.log(`Goodbye ${this.name}`)
 	}
 }
 
-const UserWithMixin = mixin(User, sayHiMixin)
+// test 1 : intermediary classes
+const UserWithOneMixin = mixin(User, sayHiMixin)
+const UserWithBothMixins = mixin(UserWithOneMixin, sayByeMixin)
+
+// test 2 : sequenced mixins
+const UserWithBothMixinsSequenced = mixin(mixin(User, sayHiMixin), sayByeMixin)
 
 test('mixin', async () => {
-	const user = new UserWithMixin('Dude')
-	expect(user.name).toBe('Dude')
-	//console.log(user.sayHi())
+	const user1 = new UserWithBothMixins('Dude1')
+	expect(user1.name).toBe('Dude1')
+	user1.sayHi()
+	user1.sayBye()
+
+	const user2 = new UserWithBothMixinsSequenced('Dude2')
+	expect(user2.name).toBe('Dude2')
+
+	user2.sayHi()
+	user2.sayBye()
 })

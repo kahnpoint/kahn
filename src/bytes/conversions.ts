@@ -10,6 +10,7 @@ import { base58xmr as base58, base64urlnopad as base64 } from '@scure/base'
 import type { Bytes } from './types'
 import { base32nopad } from '@/misc/base32nopad'
 import { ecoji } from '@/misc/ecoji'
+import { emojis } from '@/misc/ecojiEmojis'
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {
@@ -61,6 +62,9 @@ export function toEmoji(bytes: Bytes): string {
 }
 export function fromEmoji(str: string): Bytes {
 	return ecoji.decode(str)
+}
+export function alphabetEmoji() {
+	return emojis
 }
 
 // base32 strings
