@@ -22,7 +22,7 @@ export interface Emojiable<T> {
  */
 export class Typed<T>
 	extends proto.Message<Typed<T>>
-	implements Byteable<T>, Stringable<T>
+	implements Byteable<T>, Stringable<T>, Emojiable<T>
 {
 	constructor(options?: Partial<T>) {
 		super(options)

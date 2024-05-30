@@ -69,6 +69,14 @@ export class PublicKey
 			bytes.reverse(base32nopad.decode(str))
 		) as PublicKey
 	}
+	toEmoji(): string {
+		return bytes.toEmoji(bytes.reverse(this.toBytes()))
+	}
+	fromEmoji(emoji: string): PublicKey {
+		return new PublicKey().fromBytes(
+			bytes.reverse(bytes.fromEmoji(emoji))
+		) as PublicKey
+	}
 }
 
 /**

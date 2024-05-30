@@ -8,8 +8,8 @@ import {
 } from '@noble/ciphers/utils'
 import { base58xmr as base58, base64urlnopad as base64 } from '@scure/base'
 import type { Bytes } from './types'
-import { base32nopad } from '../misc/base32nopad'
-import { Ecoji } from 'base-ex'
+import { base32nopad } from '@/misc/base32nopad'
+import { ecoji } from '@/misc/ecoji'
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {
@@ -57,10 +57,10 @@ export function fromString(str: string): Bytes {
 
 // ecoji strings
 export function toEmoji(bytes: Bytes): string {
-	return Ecoji.encode(bytes)
+	return ecoji.encode(bytes)
 }
 export function fromEmoji(str: string): Bytes {
-	return Ecoji.decode(str)
+	return ecoji.decode(str)
 }
 
 // base32 strings
