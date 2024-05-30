@@ -12,6 +12,11 @@ export interface Byteable<T> {
 	fromBytes(bytes: Bytes): T
 }
 
+export interface Emojiable<T> {
+	toEmoji(): string
+	fromEmoji(emoji: string): T
+}
+
 /**
  * A shim that adds serialization methods to a class
  */
@@ -43,5 +48,16 @@ export class Typed<T>
 
 	fromString(str: string): T {
 		return this.fromBytes(bytes.fromBase32(str)) as T
+	}
+
+	/**
+	 * Emojiable
+	 */
+	toEmoji(): string {
+		return bytes.toEmoji(this.toBytes())
+	}
+
+	fromEmoji(emoji: string): T {
+		return this.fromBytes(bytes.fromEmoji(emoji)) as T
 	}
 }

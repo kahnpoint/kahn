@@ -1,4 +1,4 @@
-import { Typed } from './typedShim'
+import { Typed } from './typed'
 import { proto } from '@/index'
 
 /**
