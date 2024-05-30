@@ -59,7 +59,7 @@ export class KeyPair extends proto.Typed<KeyPair> implements KeyPairable {
 		})
 	}
 
-	static vanityAsync(prefix: string, timeout?: Milliseconds): Promise<KeyPair> {
+	vanityAsync(prefix: string, timeout?: Milliseconds): Promise<KeyPair> {
 		return new Promise((resolve, reject) => {
 			prefix = prefix.toLowerCase()
 
@@ -73,29 +73,27 @@ export class KeyPair extends proto.Typed<KeyPair> implements KeyPairable {
 				}
 			}
 
-			const prefixBytes = bytes.fromString(prefix)
-			const prefixLength = prefixBytes.length
-
-			let privateKey = ed.utils.randomPrivateKey()
-			let publicKey = ed.getPublicKey(privateKey)
-
 			const startTime = Date.now()
-			while (true) {
-				// check if the prefix matches
-				if (bytes.isEqual(publicKey.slice(0, prefixLength), prefixBytes)) {
-					resolve(
-						new KeyPair({
-							privateKeyBytes: privateKey,
-						})
-					)
-				}
 
-				if (timeout !== null) {
-					if (Date.now() - startTime > timeout!) {
-						reject('Timeout exceeded')
+			const generateKey = () => {
+				const randomKeypair = new KeyPair()
+
+				if (randomKeypair.publicKey.toString().startsWith(prefix)) {
+					resolve(randomKeypair)
+				} else {
+					if (timeout !== null) {
+						if (Date.now() - startTime > timeout!) {
+							reject('Timeout exceeded')
+						} else {
+							setImmediate(generateKey)
+						}
+					} else {
+						setImmediate(generateKey)
 					}
 				}
 			}
+
+			generateKey()
 		})
 	}
 }

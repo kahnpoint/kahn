@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 export { _ }
-import * as id from 'nanoid'
+import { nanoid as id } from 'nanoid'
 export { id }
 export * as cache from 'lib0/cache'
 import * as ky from 'ky'

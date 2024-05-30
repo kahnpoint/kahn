@@ -3,6 +3,11 @@ import { Comparison } from '../misc/types'
 import { randomBytes } from '@noble/ciphers/crypto'
 import { concatBytes, equalBytes } from '@noble/ciphers/utils'
 
+// reverse a byte buffer
+export function reverse(bytes: Bytes): Bytes {
+	return bytes.reverse()
+}
+
 // concat two or more byte buffers
 export function concat(...buffers: Bytes[]): Bytes {
 	return concatBytes(...buffers)

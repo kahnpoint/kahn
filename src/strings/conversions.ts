@@ -10,6 +10,14 @@ export function fromBytes(bytes: Bytes): string {
 	return bytes.toString(bytes)
 }
 
+// base32
+export function toBase32(str: string): string {
+	return bytes.toBase32(bytes.fromString(str))
+}
+export function fromBase32(str: string): string {
+	return bytes.toString(bytes.fromBase32(str))
+}
+
 // base58
 export function toBase58(str: string): string {
 	return bytes.toBase58(bytes.fromString(str))

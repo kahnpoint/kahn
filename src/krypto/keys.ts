@@ -10,7 +10,8 @@ import { hkdf } from '@noble/hashes/hkdf'
 import { sha256 } from '@noble/hashes/sha256'
 import type { Salt } from './salt'
 const chacha = managedNonce(chacha20poly1305)
-import { proto } from '@/index'
+import { bytes, proto } from '@/index'
+import { base32nopad } from '@/misc/base32nopad'
 
 /**
  * Key
@@ -55,6 +56,18 @@ export class PublicKey
 			this._montgomery = edwardsToMontgomeryPub(this.bytes)
 		}
 		return this._montgomery
+	}
+
+	/**
+	 * Public keys are reversed for toString in order to allow for vanity addresses
+	 */
+	toString(): string {
+		return base32nopad.encode(bytes.reverse(this.toBytes()))
+	}
+	fromString(str: string): PublicKey {
+		return new PublicKey().fromBytes(
+			bytes.reverse(base32nopad.decode(str))
+		) as PublicKey
 	}
 }
 

@@ -1,21 +1,18 @@
-import type { Bytes } from './types'
 import {
 	bytesToHex,
-	numberToBytesBE,
 	bytesToNumberBE,
 	bytesToUtf8,
 	hexToBytes,
+	numberToBytesBE,
 	utf8ToBytes,
 } from '@noble/ciphers/utils'
-import {
-	base58xmr as base58,
-	base64urlnopad as base64,
-	base32,
-} from '@scure/base'
+import { base58xmr as base58, base64urlnopad as base64 } from '@scure/base'
+import type { Bytes } from './types'
+import { base32nopad } from '../misc/base32nopad'
 
 // buffer
 export function toBuffer(bytes: Bytes): ArrayBuffer {
-	return bytes.buffer
+	return bytes.buffer as ArrayBuffer
 }
 export function fromBuffer(buffer: ArrayBuffer): Uint8Array {
 	return new Uint8Array(buffer)
@@ -57,12 +54,11 @@ export function fromString(str: string): Bytes {
 	return new TextEncoder().encode(str)
 }
 
-// base32 strings
 export function toBase32(bytes: Bytes): string {
-	return base32.encode(bytes).toLowerCase()
+	return base32nopad.encode(bytes)
 }
 export function fromBase32(str: string): Bytes {
-	return base32.decode(str.toUpperCase())
+	return base32nopad.decode(str.toLowerCase())
 }
 export function alphabetBase32() {
 	return 'abcdefghijklmnopqrstuvwxyz234567'

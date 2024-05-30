@@ -21,6 +21,7 @@ _In the future I plan to make the exports more modular, like how lodash has `lod
 
 ```javascript
 import { _ } from 'kahn' // lodash
+import { z } from 'kahn' // zod
 import { id } from 'kahn' // nanoid
 import { ky } from 'kahn' // ky
 ```
