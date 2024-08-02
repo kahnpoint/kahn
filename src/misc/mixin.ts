@@ -1,5 +1,5 @@
 /**
- * Mixin a set of classes into a base class.
+ * Merge two or more classes.
  * Usage:
  * const NewClass = mixin(MyClass, MyMixin)
  *
